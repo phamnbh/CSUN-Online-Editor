@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- Main Quill library -->
+    <script src="//cdn.quilljs.com/1.0.0/quill.js"></script>
+    <script src="//cdn.quilljs.com/1.0.0/quill.min.js"></script>
+
+    <!-- Theme included stylesheets -->
+    <link href="//cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+    <link href="//cdn.quilljs.com/1.0.0/quill.bubble.css" rel="stylesheet">
+
+    <!-- Core build with no theme, formatting, non-essential modules -->
+    <link href="//cdn.quilljs.com/1.0.0/quill.core.css" rel="stylesheet">
+    <script src="//cdn.quilljs.com/1.0.0/quill.core.js"></script>
+    <!-- Include Quill stylesheet -->
+    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+  </head>
+  <body>
+    <a href="/">Home</a>    <!-- Create the toolbar container -->
+    <div id="toolbar">
+      <button class="ql-bold">Bold</button>
+      <button class="ql-italic">Italic</button>
+    </div>
+
+    <!-- Create the editor container -->
+    <div id="editor">
+      <p>{{ocr}}</p>
+    </div>
+
+    <!-- Include the Quill library -->
+    <script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
+
+    <!-- Initialize Quill editor -->
+    <script>
+      var editor = new Quill('#editor', {
+        modules: { toolbar: '#toolbar' },
+        theme: 'snow'
+      });
+    </script>
+  </body>
+</html>
