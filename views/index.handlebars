@@ -8,15 +8,16 @@
   </head>
   <body>
     <h1>{{title}}</h1>
-    <p>Welcome to {{title}}</p>
+    <p>Welcome {{username}}</p>
     <p></p>
     <a href="/upload">Upload a file for OCR<br/></a>
     <a href="/edit">Edit a file<br/></a>
     {{#if user}}
+      <p>{{user}}</p>
       <a href="/users/logout">Logout<br/></a>
     {{else}}
       <a href="/users/login">Login<br/></a>
-      <a href="/users/register">Register<br/></a>
+      <a href="/users/signup">Register<br/></a>
     {{/if}}
   </body>
 </html>

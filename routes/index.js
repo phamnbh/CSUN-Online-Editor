@@ -3,9 +3,17 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	res.render('index', { 
+	if(req.user){
+		res.render('index', { 
+		title: 'Virtual Version',
+		username: req.user.username,
+		user: req.user
+		});
+	} else {
+		res.render('index', { 
 		title: 'Virtual Version'
-	});
+		});
+	}
 });
 
 module.exports = router;
