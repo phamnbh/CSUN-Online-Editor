@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- <title>{{title}}</title> -->
+    <!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
     <!-- Main Quill library -->
     <script src="//cdn.quilljs.com/1.0.0/quill.js"></script>
     <script src="//cdn.quilljs.com/1.0.0/quill.min.js"></script>
@@ -16,28 +16,157 @@
     <script src="//cdn.quilljs.com/1.0.0/quill.core.js"></script>
     <!-- Include Quill stylesheet -->
     <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
-  </head>
-  <body>
-    <a href="/">Home</a>    <!-- Create the toolbar container -->
-    <div id="toolbar">
-      <button class="ql-bold">Bold</button>
-      <button class="ql-italic">Italic</button>
-    </div>
-
-    <!-- Create the editor container -->
-    <div id="editor">
-      <p>{{ocr}}</p>
-    </div>
 
     <!-- Include the Quill library -->
     <script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
 
-    <!-- Initialize Quill editor -->
-    <script>
-      var editor = new Quill('#editor', {
-        modules: { toolbar: '#toolbar' },
-        theme: 'snow'
-      });
-    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="/stylesheets/wordEditorQuill.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  </head>
+  <body>
+    <div class="wrapper" id="sidebar_content">
+  
+    <nav class="navbar navbar-inverse" id="navbar_top">
+      <div class="container-fluid" id="navbar_container">       
+        <!--top left-->
+        <div class="navbar-header">
+          <!--side bar toggle button-->
+          <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn navbar-left">
+          <i class="glyphicon glyphicon-align-left"></i>
+          </button>
+          
+          <!--logo-->
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+            <span class="icon-bar"> </span> <!--the hamburger icon for collpsing-->
+            <span class="icon-bar"> </span>
+            <span class="icon-bar"> </span>
+          </button>
+          <a href="#" class="navbar-brand">Virtual Version</a>
+        </div>
+        
+        <!--menu items-->
+        <div class="collapse navbar-collapse" id="mainNavBar"> <!--id for the data-target="mainNavBar"-->
+          <ul class="nav navbar-nav" id="temp">
+            <li class="active"><a href="#">Home</a></li> <!--high lights the page the user is on-->
+            <li><a href="#">About</a></li>  <!--multiple pages cannot be active at the same time-->
+            <li><a href="#">Contact</a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+    <!--sidebar-->
+    <nav id="sidebar">
+      
+      <!--sidebar Header-->
+      <div class="sidebar-header">
+        <h3>Hello, {{username}}</h3>
+      </div>
+      
+      <!--Sidebar links-->
+      <ul class="list-unstyled components">
+        <li >
+          <a href="#"><i class="fa fa-file-text-o" style="font-size:25px;"> </i> Documents</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-calendar" style="font-size:25px"></i> Agenda</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-gear" style="font-size:25px;"></i> Settings</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-power-off" style="font-size:24px"></i> Logout</a>
+        </li>
+      </ul>
+      
+    </nav>
+    <!--content-->
+    <div id="content">
+      
+      <div id="upload_open_new">
+        <div id="UON_position">
+          <!-- <div id="toolbar"> -->
+            <!-- <button class="ql-bold">Bold</button>
+            <button class="ql-italic">Italic</button>
+            </div> -->
+          <div id="editor">
+          </div>
+          <button type="button" onclick="proceed();">Save</button> 
+          <!--fix upload and submit button stuff-->
+        </div>
+        
+        <div id="user_docs">
+          {{#each documents}}
+            <a href="/edit/{{this.reference}}">{{this.title}}<br/></a>
+          {{/each}}
+          <!--<div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'London')">Recent</button>
+            <button class="tablinks" onclick="openCity(event, 'Tokyo')">Shared with me</button>
+          </div>-->
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap Js CDN -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Nice Scroll Js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.6.8-fix/jquery.nicescroll.min.js"></script>
+  
+  <script type="text/javascript">
+  $(document).ready(function () {
+    $('#sidebar').niceScroll({
+      cursorcolor: '#53619d', // Changing the scrollbar color
+      cursorwidth: 4, // Changing the scrollbar width
+      cursorborder: 'none', // Rempving the scrollbar border
+    });
+  });
+  
+  $('#sidebarCollapse').on('click', function () {
+      $('#sidebar').toggleClass('active');
+      $('#content').toggleClass('active');
+  });
+    var toolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  ['blockquote', 'code-block'],
+
+  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+  [{ 'direction': 'rtl' }],                         // text direction
+
+  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  [{ 'font': [] }],
+  [{ 'align': [] }],
+
+  ['clean']                                         // remove formatting button
+];
+
+    var editor = new Quill('#editor', {
+      modules: { toolbar: toolbarOptions },
+      theme: 'snow'
+    });
+
+    editor.setContents({{{doc}}})
+
+    function proceed () {
+      var delta = editor.getContents()
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", '/edit', true);
+      xhr.setRequestHeader('Content-Type', 'application/JSON');
+      xhr.send(JSON.stringify(delta));
+    }
+  </script>
   </body>
 </html>

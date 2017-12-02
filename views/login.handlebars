@@ -1,35 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <meta charset="UTF-8"/>
+	<title>Login-Virtual Version</title>
+	<link rel="stylesheet" href="/stylesheets/login2.css"/>
 </head>
-<a href="/">Home</a>
-<h2 class="page-header">Account Login</h2>
-  <div class="row">
-    <div class="col-lg-12">
-      {{#if success_msg}}
-        <div class="alert alert-success">{{success_msg}}</div>
-      {{/if}}
 
-      {{#if error_msg}}
-        <div class="alert alert-danger">{{error_msg}}</div>
-      {{/if}}
+<body>
 
-      {{#if error}}
-        <div class="alert alert-danger">{{error}}</div>
-      {{/if}}
-      
-      {{{body}}}
-    </div> 
-  </div>
-<form method="post" action="/users/login">
-  <div class="form-group">
-    <label>Username</label>
-    <input type="text" class="form-control" name="username" placeholder="Username">
-  </div>
-  <div class="form-group">
-    <label>Password</label>
-    <input type="password" class="form-control" name="password" placeholder="Password">
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
+	<div id="login_form">
+		<h1>Virtual Version</h1>
+		<div class="row">
+	    	<div class="col-lg-12">
+	    		{{#if success_msg}}
+	        		<div class="alert alert-success">{{success_msg}}</div>
+	    		{{/if}}
+
+				{{#if error_msg}}
+					<div class="alert alert-danger">{{error_msg}}</div>
+				{{/if}}
+
+				{{#if error}}
+					<div class="alert alert-danger">{{error}}</div>
+				{{/if}}
+	      
+				{{{body}}}
+			</div> 
+		</div>
+		<form method="post" action="/users/login">
+			</br>
+			<input id="input_bar" type="text" class="form-control" name="username" placeholder="Username" />
+			<br/>
+			<input id="input_bar" type="password" class="form-control" name="password" placeholder="Password"/>
+			</br>
+			<input id="login_button" type="submit" value="Login" />
+		</form>
+		<link align="left">Forgot Username?</br>Forgot Password?</link>
+	</div>
+	
+	<div id = "create_retrive_acc" >
+		<p id="no_acc">Don't have an account?</p>
+		<form action="http://google.com">
+			<input id="create_acc_button" type="submit" value="Create Account" />
+		</form>
+	</div>
+	
+</body>
+
+</html>

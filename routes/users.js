@@ -3,6 +3,25 @@ var router = express.Router();
 var User = require('../models/users');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+let Article = require('../models/article')
+
+router.get('/dashboard', function(req, res, next) {
+
+	if(req.user){
+		res.render('dashboard', { 
+		title: 'Virtual Version',
+		name: req.user.name,
+		user: req.user,
+		documents: req.user.documents
+		});
+	} else {
+		//change to error
+		res.render('index', { 
+		title: 'Virtual Version'
+		});
+	}
+});
+
 
 router.get('/signup', function(req, res){
 	res.render('signup');
@@ -91,11 +110,11 @@ passport.deserializeUser(function(id, done) {
 
 router.post('/login',
 	passport.authenticate('local', {
-		successRedirect:'/',
+		successRedirect:'/users/dashboard',
 		failureRedirect:'/users/login',
 		failureFlash: true
 	}),function(req, res) {
-			res.redirect('/')
+			res.redirect('/users/dashboard')
 });
 
 

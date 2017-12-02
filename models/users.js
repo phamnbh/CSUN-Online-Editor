@@ -18,6 +18,9 @@ var userSchema = mongoose.Schema({
     },
     name: {
         type: String
+    },
+    documents: {
+        type: [{title: String, reference: Object}]
     }
     // local            : {
     //     email        : String,
@@ -85,4 +88,5 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
         if(err) throw err
         callback(null, isMatch)
     });
+
 }

@@ -90,3 +90,7 @@ body {
   }
 }
 
+#editor-container {
+  height: 350px;
+}
+

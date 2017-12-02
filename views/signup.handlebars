@@ -1,35 +1,50 @@
+<!Doctype html>
+
+<html lang="en">
+
 <head>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+	<meta charset="UTF-8"/>
+	<title>Register-Virtual Version</title>
+	<link rel="stylesheet" href="/stylesheets/register.css"/>
+	<!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
 </head>
-<a href="/">Home</a>
-<h2 class="page-header">Register</h2>
-{{#if errors}}
-      {{#each errors}}
-        <div class="alert alert-danger">{{msg}}</div>
-      {{/each}}
-{{/if}}
-<form method="post" action="/users/signup">
-   <div class="form-group">
-    <label>Name</label>
-    <input type="text" class="form-control" placeholder="Name" name="name">
-  </div>
-  <div class="form-group">
-    <label>Username</label>
-    <input type="text" class="form-control" placeholder="Username" name="username">
-  </div>
-   <div class="form-group">
-    <label>Email</label>
-    <input type="email" class="form-control" placeholder="Email" name="email">
-  </div>
-  <div class="form-group">
-    <label>Password</label>
-    <input type="password" class="form-control" placeholder="Password" name="password">
-  </div>
-  <div class="form-group">
-    <label>Confirm Password</label>
-    <input type="password" class="form-control" placeholder="Password" name="password2">
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
+
+<body>
+	<div id="headerVV">
+		<h10>Virtual Version</h10>
+	</div>
+	{{#if errors}}
+    	{{#each errors}}
+    		<div class="alert alert-danger">{{msg}}</div>
+    	{{/each}}
+	{{/if}}
+	<div id="user_create_acc_input_box">
+		<p id="catch_phrase" ><span style="font-weight:bold">Join Virtual Version today.</span></p>
+		<form id="user_input_form" method="post" action="/users/signup" >
+			<input type= "text" class="form-control" placeholder="Name" name="name"/>
+			</br>
+			<input type= "text" class="form-control" placeholder="Username" name="username"/>
+			</br>
+			<input type="email" class="form-control" placeholder="Email" name="email"/>
+			</br>
+			<input type="password" class="form-control" placeholder="Password" name="password"/>
+			</br> 
+			<input type="password" class="form-control" placeholder="Confirm Password" name="password2"/> 
+			</br>
+			<input id="sign_up_button"type="submit" value="Sign up" />
+			<p> <span style="font-size:14px">By signing up, you agree to the <a href="https://google.com">Terms of Service</a> 
+				and <a href="https://google.com">Privacy Policy.</a></p></span>
+		</form>
+	</div>
+	
+	<footer id="the_foot">
+		<a href='https://play.google.com/store/?pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+		<img height="75px" width="200" id="google_play" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+		</br>
+		<p id="copyright">Copyright Virtual Version 2017</p>
+	</footer>
+</body>
+
+</html>

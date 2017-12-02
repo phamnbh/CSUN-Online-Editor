@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+  </head>
+  <body>
+    <h1>{{title}}</h1>
+    <p>Welcome {{username}}</p>
+    <p></p>
+    {{#if user}}
+      <p>{{user}}<br/></p>
+      <p></p>
+      {{#each documents}}
+        <a href="/edit/{{this.reference}}">{{this.title}}<br/></a>
+      {{/each}}
+      <a href="/upload">Upload a file for OCR<br/></a>
+      <a href="/edit/new">New File<br/></a>
+      <a href="/users/logout">Logout<br/></a>
+    {{else}}
+      <a href="/users/login">Login<br/></a>
+      <a href="/users/signup">Register<br/></a>
+    {{/if}}
+  </body>
+</html>

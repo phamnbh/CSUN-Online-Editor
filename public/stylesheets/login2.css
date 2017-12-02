@@ -1,0 +1,86 @@
+*{
+	margin:0px;
+	padding:0px;
+}
+
+body{
+  height: 100%;
+}
+body { 
+	background-image: url(../images/mata_stat2.jpg);
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
+}
+
+#login_form{
+    margin: auto;    /*Use margin:auto to center the div*/
+	margin-top:20px;
+    width: 15%;
+    border: 3px solid #a37e11;
+    padding: 50px;
+	height: 350px;
+	background: #F2F2F2;
+}
+
+h1{
+	text-align: center; /*Normal text can be aligned using text-align*/
+	font-family: courier;
+	font-size:40px;
+}
+
+#input_bar{
+	background: #f2f2f2;
+	border:2px solid #4d4d4d;
+	width:90%;
+	padding:10px;
+	margin-bottom:30px;
+}
+
+#login_button{
+	background-color: #66b3ff;
+	border-radius: 4px;
+	border:2px  solid #4d4d4d;
+	color:white;
+	width:100%;
+	padding:10px;
+	margin-bottom:20px;
+}
+
+#login_button:hover {
+    background-color: #3399ff;
+    color: white;
+}
+
+#create_retrive_acc{
+	margin:auto;
+	margin-top:10px;
+	width:15%;
+	border: 2px solid #a37e11;
+	background:#F2F2F2;
+	height:80px;
+	padding:20px;
+}
+
+#create_acc_button{
+	background-color: #66b3ff;
+	border-radius: 4px;
+	border:2px  solid #4d4d4d;
+	color:white;
+	width:100%;
+	padding:10px;
+	margin-top:10px;
+}
+
+#create_acc_button:hover {
+    background-color: #3399ff;
+    color: white;
+}
+
+#no_acc{
+	text-align: center;
+}
+  
+
