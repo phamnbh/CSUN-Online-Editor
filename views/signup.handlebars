@@ -15,13 +15,14 @@
 	<div id="headerVV">
 		<h10>Virtual Version</h10>
 	</div>
-	{{#if errors}}
-    	{{#each errors}}
-    		<div class="alert alert-danger">{{msg}}</div>
-    	{{/each}}
-	{{/if}}
+	
 	<div id="user_create_acc_input_box">
 		<p id="catch_phrase" ><span style="font-weight:bold">Join Virtual Version today.</span></p>
+		{{#if errors}}
+    		{{#each errors}}
+    			<div class="alert alert-danger">{{msg}}</div>
+    		{{/each}}
+		{{/if}}
 		<form id="user_input_form" method="post" action="/users/signup" >
 			<input type= "text" class="form-control" placeholder="Name" name="name"/>
 			</br>

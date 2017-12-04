@@ -50,7 +50,7 @@
         <!--menu items-->
         <div class="collapse navbar-collapse" id="mainNavBar"> <!--id for the data-target="mainNavBar"-->
           <ul class="nav navbar-nav" id="temp">
-            <li class="active"><a href="#">Home</a></li> <!--high lights the page the user is on-->
+            <li class="active"><a href="/users/dashboard">Home</a></li> <!--high lights the page the user is on-->
             <li><a href="#">About</a></li>  <!--multiple pages cannot be active at the same time-->
             <li><a href="#">Contact</a></li>
             
@@ -70,7 +70,7 @@
       <!--Sidebar links-->
       <ul class="list-unstyled components">
         <li >
-          <a href="#"><i class="fa fa-file-text-o" style="font-size:25px;"> </i> Documents</a>
+          <a href="/users/dashboard"><i class="fa fa-file-text-o" style="font-size:25px;"> </i> Documents</a>
         </li>
         <li>
           <a href="#"><i class="fa fa-calendar" style="font-size:25px"></i> Agenda</a>
@@ -161,9 +161,13 @@
     editor.setContents({{{doc}}})
 
     function proceed () {
+
+      var url = window.location.pathname
+      var getQuery = url.split('/')
+
       var delta = editor.getContents()
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", '/edit', true);
+      xhr.open("POST", '/edit/'+getQuery[2], true);
       xhr.setRequestHeader('Content-Type', 'application/JSON');
       xhr.send(JSON.stringify(delta));
     }

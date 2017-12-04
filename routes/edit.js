@@ -26,9 +26,31 @@ router.get('/:id', function(req, res, next) {
 		title: 'Virtual Version', 
 		ocr: 'Hello, world!',
 		doc: JSON.stringify(article.body.ops)
-		
-	});
-		
+		});
+
+	})
+})
+
+router.post('/:id', function(req, res, next) {
+	let id = req.params.id
+	console.log(req.body)
+	Article.findById(new ObjectId(id), function(err, doc){
+		if (err) {
+			return handleError(err)
+		} else {
+			if(!doc){
+				console.log("not found")
+			} else{
+				doc.body = req.body
+				doc.save(function(err){
+					if(err){
+						return
+					} else {
+						console.log("Updated")
+					}
+				})
+			}
+		}
 	})
 })
 

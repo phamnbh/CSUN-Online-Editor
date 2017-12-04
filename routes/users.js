@@ -76,7 +76,6 @@ router.post('/signup', function(req, res){
 
 passport.use(new LocalStrategy(
 	function(username, password, done) {
-		console.log("hi")
 		User.getUserByUsername(username, function(err, user){
 			if(err) throw err;
 			if(!user){

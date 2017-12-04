@@ -17,6 +17,7 @@ var session = require('express-session');
 var index = require('./routes/index');
 var upload = require('./routes/upload');
 var edit = require('./routes/edit');
+var api = require('./routes/api');
 // var login = require('./routes/login');
 // var signup = require('./routes/signup');
 var users = require('./routes/users');
@@ -89,6 +90,7 @@ app.use('/edit', edit);
 // app.use('/login', login);
 // app.use('/signup', signup);
 app.use('/users', users);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
