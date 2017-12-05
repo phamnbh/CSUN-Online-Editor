@@ -11,7 +11,7 @@ var config = require('../config/main');
 require('../config/passport-jwt.js')(passport);
 
 router.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
-  res.send('It worked! User id is: ' + req.user._id + '.');
+  res.send('It worked! User id is: ' + req.user+ '.');
 });
 
 
@@ -80,7 +80,7 @@ router.post('/login', function(req, res) {
         if (isMatch && !err) {
           // Create token if the password matched and no error was thrown
           var token = jwt.sign(JSON.stringify(user), config.secret);
-          res.json({ success: true, token: 'JWT ' + token });
+          res.json({ success: true, id: user._id, token:"JWT " + token });
         } else {
           res.send({ success: false, message: 'Authentication failed. Passwords did not match.' });
         }

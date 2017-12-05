@@ -19,7 +19,7 @@ router.post('/', upload.single('userFile'), function (req, res, next) {
 			ocrText = result.text
 			console.log(result.confidence)
 			
-			res.render('edit', { 
+			res.render('new', { 
 				title: "upload",
 				ocr: ocrText
 			})

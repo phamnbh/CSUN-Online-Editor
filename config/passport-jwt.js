@@ -7,10 +7,10 @@ var config = require('../config/main');
 // Setup work and export for the JWT passport strategy
 module.exports = function(passport) {
   var opts = {};
-  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
   opts.secretOrKey = config.secret;
   passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.id}, function(err, user) {
+    User.findOne({_id: jwt_payload._id}, function(err, user) {
       if (err) {
         return done(err, false);
       }

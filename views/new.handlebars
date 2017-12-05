@@ -47,11 +47,12 @@
       //   editor.setContents(a)
       // {{/if}}
       
-      function proceed () {
+      function proceed() {
         var delta = {
           "title": document.getElementById("title").value, 
-          "content":editor.getContents()
+          "content": editor.getContents()
         }
+
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '/edit/new', true);
         xhr.setRequestHeader('Content-Type', 'application/JSON');
