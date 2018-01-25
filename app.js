@@ -26,12 +26,33 @@ var app = express();
 
 
 // configuration ===============================================================
-mongoose.connect('mongodb://localhost/my_database'); // connect to our database
-//Get the default connection
+var uri = 'mongodb://bobobis:Csun123!@ds113358.mlab.com:13358/virtual_version'
+var options = {
+  "server" : {
+    "socketOptions" : {
+      "keepAlive" : 300000,
+      "connectTimeoutMS" : 30000
+    }
+  },
+  "replset" : {
+    "socketOptions" : {
+      "keepAlive" : 300000,
+      "connectTimeoutMS" : 30000
+    }
+  }
+}
+
+mongoose.connect(uri, options);
+
 var db = mongoose.connection;
 
-//Bind connection to error event (to get notification of connection errors)
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.on('error', console.error.bind(console, 'connection error:'));
+// mongoose.connect('mongodb://localhost/my_database'); // connect to our database
+// //Get the default connection
+// var db = mongoose.connection;
+
+// //Bind connection to error event (to get notification of connection errors)
+// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
