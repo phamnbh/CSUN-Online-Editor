@@ -4,6 +4,30 @@ var Article = require('../models/article')
 var User = require('../models/users');
 var ObjectId = require('mongoose').Types.ObjectId; 
 
+var socketApi = require('../socketApi');
+var io = socketApi.io;
+
+// io.sockets.on('connection', function(socket){
+// 	console.log('A user connected (edit.js)', socket.id);
+// 	socket.on("client", function(data){
+// 		socket.broadcast.emit('server', data)
+// 		console.log(data)
+// 	})
+// });
+
+io.sockets.on('connection', function(socket) {
+    // once a client has connected, we expect to get a ping from them saying what room they want to join
+    console.log('A user connected (edit.js)', socket.id);
+    socket.on('room', function(room) {
+        socket.join(room);
+        console.log(socket.id, ' connected to', room);
+    });
+    socket.on('client', function(data){
+    	let rooms = Object.keys(socket.rooms);
+    	socket.to(rooms[1]).emit('server', data)
+    })
+});
+
 
 /* GET home page. */
 router.get('/new', function(req, res, next) {
@@ -37,6 +61,22 @@ router.post('/new', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
 	let id = req.params.id
 	console.log(id)
+
+	var room = id
+
+	io.sockets.on('client', function(data){
+		console.log(data)
+		io.sockets.in(room).emit('server', data)
+	})
+	// io.of("/"+id).on('connection', function(socket){
+ //    	console.log('A user connected (edit.js)', socket.id);
+ //    	socket.on("client", function(data){
+ //    		socket.broadcast.emit('server', data)
+ //    		console.log(data)
+ //    	})
+	// });
+
+
 	Article.findById(new ObjectId(id), function(err, article){
 		console.log(article)
 		console.log(req.params.id)

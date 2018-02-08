@@ -25,6 +25,9 @@
     <link rel="stylesheet" href="/stylesheets/wordEditorQuill.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <!-- Socket.io -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+
   </head>
   <body>
     <div class="wrapper" id="sidebar_content">
@@ -96,6 +99,7 @@
           <div id="editor">
           </div>
           <button type="button" onclick="proceed();">Save</button> 
+          <button type="button" onclick="update();">Socket</button> 
           <!--fix upload and submit button stuff-->
         </div>
         
@@ -159,6 +163,33 @@
     });
 
     editor.setContents({{{doc}}})
+
+    var url = window.location.pathname
+    var getQuery = url.split('/')
+
+    var socket = io.connect()
+
+    socket.on('connect', function() {
+   // Connected, let's sign-up for to receive messages for this room
+      socket.emit('room', getQuery[2]);
+    });
+
+    editor.on('text-change', function(delta, oldDelta, source){
+      // var delta = editor.getContents()
+      if (source == 'api') {
+        console.log("An API call triggered this change.");
+      } else if (source == 'user') {
+        var sessionid = socket.io.engine.id
+        console.log("A user action triggered this change.");
+        socket.emit('client', delta)
+        console.log("delta:", delta)
+        console.log("oldDelta:", oldDelta)
+      }
+    })
+
+    socket.on('server', function(data){
+        editor.updateContents(data)
+    })
 
     function proceed () {
 
