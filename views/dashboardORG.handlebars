@@ -1,0 +1,140 @@
+<html !DOCTYPE>
+<head>
+    <title>Virtual Version-Home</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <!-- <link rel="stylesheet" href="sidebar.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--  <link rel='stylesheet' href='/stylesheets/style.css'/>--> 
+  <link rel="stylesheet" href="/stylesheets/sidebar.css">
+</head>
+<body>
+  <div class="wrapper" id="sidebar_content">
+  
+    <nav class="navbar navbar-inverse" id="navbar_top">
+      <div class="container-fluid" id="navbar_container">       
+        <!--top left-->
+        <div class="navbar-header">
+          <!--side bar toggle button-->
+          <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn navbar-left">
+          <i class="glyphicon glyphicon-align-left"></i>
+          </button>
+          
+          <!--logo-->
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+            <span class="icon-bar"> </span> <!--the hamburger icon for collpsing-->
+            <span class="icon-bar"> </span>
+            <span class="icon-bar"> </span>
+          </button>
+          <a href="/users/dashboard" class="navbar-brand">Virtual Version</a>
+        </div>
+        
+        <!--menu items-->
+        <div class="collapse navbar-collapse" id="mainNavBar"> <!--id for the data-target="mainNavBar"-->
+          <ul class="nav navbar-nav" id="temp">
+            <li class="active"><a href="#">Home</a></li> <!--high lights the page the user is on-->
+            <li><a href="#">About</a></li>  <!--multiple pages cannot be active at the same time-->
+            <li><a href="#">Contact</a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+    <!--sidebar-->
+    <nav id="sidebar">
+      
+      <!--sidebar Header-->
+      <div class="sidebar-header">
+        <h3>Hello, {{name}}</h3>
+      </div>
+      
+      <!--Sidebar links-->
+      <ul class="list-unstyled components">
+        <li >
+          <a href="#"><i class="fa fa-file-text-o" style="font-size:25px;"> </i> Documents</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-calendar" style="font-size:25px"></i> Agenda</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-gear" style="font-size:25px;"></i> Settings</a>
+        </li>
+        <li>
+          <a href="/users/logout"><i class="fa fa-power-off" style="font-size:24px"></i> Logout</a>
+        </li>
+      </ul>
+      
+    </nav>
+    <!--content-->
+    <div id="content">
+      
+      <div id="upload_open_new">
+        <div id="UON_position">
+          <div style="display: inline" id="document_header">
+            <h3 style="display: inline"> 
+              <span style="font-family:Courier">Documents</span>
+            </h3>
+          </div>
+          
+          <!--fix upload and submit button stuff-->
+          <div style="display: inline" id="upload_button">
+            
+            <!-- <form action="127.0.0.1" method="post" style="display: inline">
+              <input type="file" id="files" class="hidden" onchange="this.form.submit()" name="myFile" />
+              <label id="buttonAlias" for="files">Open File</label>
+            </form> -->
+            <a href="/upload">OCR<br/></a>
+            <a href="/edit/new">New File<br/></a>
+          </div>
+        </div>
+        
+        <div id="user_docs">
+          {{#each documents}}
+            <a href="/edit/{{this.reference}}">{{this.title}}<br/></a>
+          {{/each}}
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap Js CDN -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Nice Scroll Js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.6.8-fix/jquery.nicescroll.min.js"></script>
+  
+  <script type="text/javascript">
+  $(document).ready(function () {
+    $('#sidebar').niceScroll({
+      cursorcolor: '#53619d', // Changing the scrollbar color
+      cursorwidth: 4, // Changing the scrollbar width
+      cursorborder: 'none', // Rempving the scrollbar border
+    });
+  });
+  
+  $('#sidebarCollapse').on('click', function () {
+      $('#sidebar').toggleClass('active');
+      $('#content').toggleClass('active');
+  });
+  
+  </script>
+  <script type="text/javascript">
+  	var decodedJson = decodeURIComponent("{{documents}}");
+	var jsonObj = JSON.parse(decodedJson);
+  	
+  	var e = document.getElementById("user_docs"); // whatever you want to append the rows to: 
+     
+    for(var i = 0; i < jsonObj.length; i++){ 
+        var row = document.createElement("div"); 
+        row.className = "row"; 
+        row.innerText = jsonObj[i].title
+        e.appendChild(row); 
+      } 
+      document.getElementById("code").innerText = e.innerHTML;
+  </script>
+</body>
+</html>

@@ -12,7 +12,7 @@ router.get('/dashboard', function(req, res, next) {
 		title: 'Virtual Version',
 		name: req.user.name,
 		user: req.user,
-		documents: req.user.documents
+		documents: encodeURIComponent(JSON.stringify(req.user.documents))
 		});
 	} else {
 		//change to error

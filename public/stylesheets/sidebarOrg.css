@@ -93,7 +93,7 @@ body{
 #upload_open_new{
 	border:1px #f4f4f4 solid;
 	margin: auto;
-	height:80vh;
+	height:80%;
 	max-width:60vw;
 	min-width:0%;
 	background-color:#ffffff;
@@ -174,28 +174,6 @@ div.tab button {
 #user_docs .tab > button:hover {
 	background-color:D0D0D0;
 }
-
-#documents{
-	margin:auto;
-	height:70vh;
-	margin-top:35px;
-	overflow:auto;
-
-}
-
-.docDivs{
-	margin:auto;
-	width:100%;
-	padding:10px;
-	border-bottom: 1px solid  #e6e6e6;
-	border-top:1px solid  #e6e6e6;
-}
-
-.docDivs:hover{
-	background: #ffffe6;
-	width:100%;
-}
-
 
 .overlay {
     /* full screen */
