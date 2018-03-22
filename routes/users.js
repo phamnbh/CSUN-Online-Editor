@@ -123,4 +123,10 @@ router.get('/logout', function(req, res){
 	res.redirect('/users/login');
 });
 
+//--------------------------------------Agenda starts here-------------------------------------------------------
+
+router.get('/agenda', function(req, res){
+	res.render('agenda')
+})
+
 module.exports = router;
