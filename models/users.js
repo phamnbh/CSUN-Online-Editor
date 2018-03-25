@@ -21,7 +21,12 @@ var userSchema = mongoose.Schema({
     },
     documents: {
         type: [{title: String, reference: Object}]
-    }
+    },
+    events: {
+        type:[{title: String, start: String, end: String, description: String}]
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
     // local            : {
     //     email        : String,
     //     password     : String,
@@ -69,6 +74,16 @@ module.exports.createUser = function(newUser, callback){
         bcrypt.hash(newUser.password, salt, null,function(err, hash) {
             newUser.password = hash
             newUser.save(callback)
+        });
+    });
+}
+
+module.exports.setPassword = function(user, callback){
+    var saltRounds = 10
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+        bcrypt.hash(user.password, salt, null,function(err, hash) {
+            user.password = hash
+            user.save(callback)
         });
     });
 }
