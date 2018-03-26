@@ -175,13 +175,18 @@
     });
 
     editor.on('text-change', function(delta, oldDelta, source){
-      // var delta = editor.getContents()
+      var curr = editor.getContents()
       if (source == 'api') {
         console.log("An API call triggered this change.");
       } else if (source == 'user') {
         var sessionid = socket.io.engine.id
         console.log("A user action triggered this change.");
-        socket.emit('client', delta)
+        // socket.emit('client', delta) working
+        var data={  
+            delta : delta,  
+            oldDelta : curr
+        };
+        socket.emit('client', data)
         console.log("delta:", delta)
         console.log("oldDelta:", oldDelta)
       }
