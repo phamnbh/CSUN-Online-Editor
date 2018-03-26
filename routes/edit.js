@@ -50,17 +50,18 @@ io.sockets.on('connection', function(socket) {
 
     	var self = this;
     	var rooms = Object.keys(self.rooms);
-    	// console.log(self)
     	rooms.forEach(function(room){
 	        if(room in allClients){
 	        	allClients[room].numUsers -= 1
-	        	if (allClients[room].numUser == 0){
+	        	console.log(room, allClients[room])
+	        	if (allClients[room].numUsers == 0){
+	        		console.log('yo')
 	        		Article.findById(new ObjectId(room), function(err, doc){
 	        			doc.body = allClients[room].body
+	        			doc.save()
+	        			delete allClients[room]
 	        		})
-	        		delete allClients[room]
 	        	}
-	        	// console.log("hi", room, allClients[room])
 	        }
     	});
 	});
@@ -104,21 +105,7 @@ router.post('/new', function(req, res, next) {
 
 router.get('/:id', function(req, res, next) {
 	let id = req.params.id
-	// console.log(id)
-
 	var room = id
-
-	// io.sockets.on('client', function(data){
-	// 	console.log(data)
-	// 	io.sockets.in(room).emit('server', data)
-	// })
-	// io.of("/"+id).on('connection', function(socket){
- //    	console.log('A user connected (edit.js)', socket.id);
- //    	socket.on("client", function(data){
- //    		socket.broadcast.emit('server', data)
- //    		console.log(data)
- //    	})
-	// });
 
     if (room in allClients){
     	allClients[room].numUsers += 1
