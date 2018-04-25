@@ -1,11 +1,83 @@
-<!DOCTYPE html>
-<html>
+<html !doctype>
+
 <head>
-  <title></title>
+    <link rel = "stylesheet" href = "/stylesheets/GreetingsPage.css" >
+    <title>Virtual Version</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
+
 <body>
-<h1>Welcome to Virtual Version<br/></h1>
-<a href="/users/login">Login<br/></a>
-<a href="/users/signup">Register</b></a>
+
+
+<div id = "imageOne">  
+    <div id="logoBox">
+        <div id = "logo">
+            <img src = "../images/logo3.png">
+        </div>
+        <div id = "catchPhrase">
+            <p id = "smartAndSecure">
+                <font  color = "black" >
+                    <span style="font-family:Courier">A smart and secure way to work</span>
+                </font>
+            </p>
+        </div>
+        <div id = "buttonBox">
+        	<a href="/users/login"><button id ="joinButton">Sign in</button></a>
+        	<p></p></br>
+            <a href="/users/signup"><button id ="joinButton">Join Now</button></a>
+            <!-- <a href="/users/signup" id="joinButton" class="btn btn-default">Join Now</a> -->
+        </div>
+    </div>  
+</div>
+
+<div id ="container">
+    <div id ="descriptionBox">
+            <!--<p>Virtual Version is unlike any other cloud based storage. Our only focus is to make your files easy to store and convinient to access. 
+            Discover how Virtual Version can help you today. </p>-->
+            <p id = "accessFile">
+                <font  color = "black" >
+                    <span style="font-family:Courier">Access your files anywhere. Anytime.</span>
+                    <br/>
+                </font>
+            </p>
+            <p id ="reachFile">
+                <font  color="black">
+                    <span style = "font-family: Times New Roman ">
+                        You can reach your files on any computer or android phone.
+                    </span>
+                </font>
+            </p>
+    </div>
+
+    <div id = "slideShowBox" class = "w3-content w3-section" style="min-width:100vw">
+        <img class = "mySlides w3-animate-right" src = "/images/hiking.jpg" >
+        <img class = "mySlides w3-animate-right" src = "/images/anytime.jpg" >
+    </div>
+</div>
+
+<script>
+
+    count = 0;
+    carousel(); 
+
+    function carousel(){
+        var i;
+        var x = document.getElementsByClassName('mySlides'); //returns an array of images.
+        for( i = 0; i < x.length; i++){
+            x[i].style.display = "none";
+        }
+        count++;
+        if (count > x.length){
+            count = 1;
+        }
+        x[count-1].style.display = "block";
+        setTimeout(carousel, 4500);
+    }
+</script>
+
 </body>
+
+
 </html>

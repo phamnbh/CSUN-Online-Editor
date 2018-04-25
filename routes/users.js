@@ -7,24 +7,84 @@ var async = require('async');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 let Article = require('../models/article');
+var ObjectId = require('mongoose').Types.ObjectId;
+var bodyParser = require('body-parser');
+
+
 
 router.get('/dashboard', function(req, res, next) {
-
 	if(req.user){
-		res.render('dashboard', { 
-		title: 'Virtual Version',
-		name: req.user.name,
-		user: req.user,
-		documents: encodeURIComponent(JSON.stringify(req.user.documents))
-		});
+    var ids = []
+
+    for (var i = 0; i < req.user.documents.length; i++) {
+      var id = req.user.documents[i].reference
+      ids.push(id)
+    }
+
+    Article.find({
+      '_id' : {$in : ids}
+    }, function(err, docs){
+      res.render('dashboard', { 
+      title: 'Virtual Version',
+      name: req.user.name,
+      user: req.user,
+      documents: encodeURIComponent(JSON.stringify(docs))
+      });
+    })
 	} else {
-		//change to error
-		res.render('index', { 
-		title: 'Virtual Version'
-		});
+    res.redirect('/')
 	}
 });
 
+router.post('/dashboard', function(req, res){
+  console.log(req.body._id)
+  User.update(
+    {_id: req.user._id}, 
+    { $pull: { documents: { reference: req.body._id}}},
+    {multi:true },
+    function(err, obj){
+      if(err){
+        console.log(err)  
+      }
+      console.log(obj)
+    }
+  )
+
+})
+
+router.get('/agenda', function(req, res){
+  console.log(req.user.events)
+  res.render('agenda', {events:req.user.events})
+})
+
+router.post('/agenda', function(req, res){
+  console.log(req.body)
+  let inc = req.body
+  console.log("inc:", inc)
+  req.user.events.push(inc)
+  req.user.save()
+})
+
+router.post('/agenda-del', function(req,res) {
+  console.log("del" + JSON.stringify(req.body))
+  console.log(req.body.title)
+  User.update(
+    {_id:req.user._id}, 
+    { $pull: { events: { title:req.body.title, end:req.body.end, start:req.body.start}}},
+    {multi:true },
+    function(err, obj){
+      if(err){
+        console.log(err)  
+      }
+      console.log(obj)
+      
+    }
+  )
+})
+
+router.post('/ocr', function(req, res){
+  
+})
 
 router.get('/signup', function(req, res){
 	res.render('signup');
@@ -256,19 +316,5 @@ router.post('/reset/:token', function(req, res) {
 
 
 
-
-//--------------------------------------Agenda starts here-------------------------------------------------------
-
-router.get('/agenda', function(req, res){
-	res.render('agenda', {
-		events: user.events
-	})
-})
-
-router.post('/agenda', function(req, res){
-	let inc = req.body
-	req.user.events.push(event)
-	req.user.save()
-})
 
 module.exports = router;

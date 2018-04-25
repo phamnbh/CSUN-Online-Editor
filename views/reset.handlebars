@@ -1,26 +1,37 @@
-{{#if success_msg}}
-  <div class="alert alert-success">{{success_msg}}</div>
-{{/if}}
 
-{{#if error_msg}}
-  <div class="alert alert-danger">{{error_msg}}</div>
-{{/if}}
+<html !doctype>
+<head>
+	<meta charset="UTF-8"/>
+	<title>Reset-Virtual Version</title>
+	<link rel="stylesheet" href="/stylesheets/reset_password.css"/> 
+</head>
 
-{{#if error}}
-  <div class="alert alert-danger">{{error}}</div>
-{{/if}}
+<body>
+	<div id="header">
+		<h1>Virtual Version</h1>
+	</div>
+	<div id="user_create_acc_input_box">
+        {{#if success_msg}}
+            <div class="alert alert-success">{{success_msg}}</div>
+        {{/if}}
+          
+        {{#if error_msg}}
+            <div class="alert alert-danger">{{error_msg}}</div>
+        {{/if}}
+          
+        {{#if error}}
+            <div class="alert alert-danger">{{error}}</div>
+        {{/if}}      
+        <form method="POST">
+            <fieldset>
+                <legend>Reset Password:</legend>
+                        <br>
+                        <input class="form-control" type="password" name="password" value=""  autofocus="autofocus" placeholder="New password"/>
+                        <input class="form-control" type="password" name="confirm" value="" placeholder="Confirm new password"/>
+                        <a><button id ="update_password" class="btn btn-primary" type="submit">Update Password</button></a>
+            </fieldset>
+        </form>
+	</div>
+</body>
 
-<form method="POST">
-  <legend>Reset Password</legend>
-  <div class="form-group">
-    <label for="password">New Password</label>
-    <input class="form-control" type="password" name="password" value="" placeholder="New password" autofocus="autofocus"/>
-  </div>
-  <div class="form-group">
-    <label for="confirm">Confirm Password</label>
-    <input class="form-control" type="password" name="confirm" value="" placeholder="Confirm password"/>
-  </div>
-  <div class="form-group">
-    <button class="btn btn-primary" type="submit">Update Password</button>
-  </div>
-</form>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{title}}</title>
+    <!-- <title>{{title}}</title> -->
     <!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
     <!-- Main Quill library -->
     <script src="//cdn.quilljs.com/1.0.0/quill.js"></script>
@@ -19,68 +19,218 @@
 
     <!-- Include the Quill library -->
     <script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="/stylesheets/wordEditorQuill.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Socket.io -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+
   </head>
   <body>
-    <a href="/users/dashboard">Home</a>    <!-- Create the toolbar container -->
-
-    Title:<br/>
-    <input type="text" name="title" id="title">
-    <div id="toolbar">
-      <button class="ql-bold">Bold</button>
-      <button class="ql-italic">Italic</button>
-    </div>
+    <div class="wrapper" id="sidebar_content">
+  
+    <nav class="navbar navbar-inverse" id="navbar_top">
+      <div class="container-fluid" id="navbar_container">       
+        <!--top left-->
+        <div class="navbar-header">
+          <!--side bar toggle button-->
+          <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn navbar-left">
+          <i class="glyphicon glyphicon-align-left"></i>
+          </button>
+          
+          <!--logo-->
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+            <span class="icon-bar"> </span> <!--the hamburger icon for collpsing-->
+            <span class="icon-bar"> </span>
+            <span class="icon-bar"> </span>
+          </button>
+          <a href="#" class="navbar-brand">Virtual Version</a>
+        </div>
+        
+        <!--menu items-->
+        <div class="collapse navbar-collapse" id="mainNavBar"> <!--id for the data-target="mainNavBar"-->
+          <ul class="nav navbar-nav" id="temp">
+            <li class="active"><a href="/users/dashboard">Home</a></li> <!--high lights the page the user is on-->
+            <li><a href="#">About</a></li>  <!--multiple pages cannot be active at the same time-->
+            <li><a href="#">Contact</a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
     
-    <!-- Create the editor container -->
-    <div id="editor">
-      <p>{{ocr}}</p>
+    <!--sidebar-->
+    <nav id="sidebar">
+      
+      <!--sidebar Header-->
+      <div class="sidebar-header">
+        <h3>Hello, {{name}}</h3>
+      </div>
+      
+      <!--Sidebar links-->
+      <ul class="list-unstyled components">
+        <li >
+          <a href="/users/dashboard"><i class="fa fa-file-text-o" style="font-size:25px;"> </i> Documents</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-calendar" style="font-size:25px"></i> Agenda</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-gear" style="font-size:25px;"></i> Settings</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-power-off" style="font-size:24px"></i> Logout</a>
+        </li>
+      </ul>
+      
+    </nav>
+    <!--content-->
+    <div id="content">
+      Title:<br/>
+          <input type="text" name="title" id="title"> 
+      <div id="upload_open_new">
+      
+        <div id="UON_position">
+          <!-- <div id="toolbar"> -->
+            <!-- <button class="ql-bold">Bold</button>
+            <button class="ql-italic">Italic</button>
+            </div> --> 
+          <div id="editor">
+          </div>
+          <button type="button" onclick="proceed();">Save</button> 
+          <button type="button" onclick="update();">Socket</button>
+          <form method="post" action="/edit/share">
+            </br>
+            <input name="shareWith" type="text" class="form-control" />
+            <br/>
+            <input id="login_button" type="submit" value="Share" />
+          </form>
+          <!--fix upload and submit button stuff-->
+        </div>
+        
+        <div id="user_docs">
+          {{#each documents}}
+            <a href="/edit/{{this.reference}}">{{this.title}}<br/></a>
+          {{/each}}
+          <!--<div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'London')">Recent</button>
+            <button class="tablinks" onclick="openCity(event, 'Tokyo')">Shared with me</button>
+          </div>-->
+        </div>
+        
+      </div>
     </div>
-    <!-- Initialize Quill editor -->
-    <button type="button" onclick="proceed();">Save</button> 
-    <script>
-      var editor = new Quill('#editor', {
-        modules: { toolbar: '#toolbar' },
-        theme: 'snow'
-      });
-      
-      // {{#if doc}}
-      //   var a = {{doc}}
-      //   editor.setContents(a)
-      // {{/if}}
-      
-      function proceed() {
-        var delta = {
-          "title": document.getElementById("title").value, 
-          "content": editor.getContents()
-        }
+  </div>
+  
+  <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap Js CDN -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Nice Scroll Js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.6.8-fix/jquery.nicescroll.min.js"></script>
+  
+  <script type="text/javascript">
+  $(document).ready(function () {
+    $('#sidebar').niceScroll({
+      cursorcolor: '#53619d', // Changing the scrollbar color
+      cursorwidth: 4, // Changing the scrollbar width
+      cursorborder: 'none', // Rempving the scrollbar border
+    });
+  });
+  
+  $('#sidebarCollapse').on('click', function () {
+      $('#sidebar').toggleClass('active');
+      $('#content').toggleClass('active');
+  });
+    var toolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  ['blockquote', 'code-block'],
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", '/edit/new', true);
-        xhr.setRequestHeader('Content-Type', 'application/JSON');
-        xhr.send(JSON.stringify(delta));
+  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+  [{ 'direction': 'rtl' }],                         // text direction
+
+  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  [{ 'font': [] }],
+  [{ 'align': [] }],
+
+  ['clean']                                         // remove formatting button
+];
+
+    var editor = new Quill('#editor', {
+      modules: { toolbar: toolbarOptions },
+      theme: 'snow'
+    });
+
+    editor.setContents({{{doc}}})
+
+    var url = window.location.pathname
+    var getQuery = url.split('/')
+
+    var socket = io.connect()
+
+    socket.on('connect', function() {
+   // Connected, let's sign-up for to receive messages for this room
+      socket.emit('room', getQuery[2]);
+    });
+
+    editor.on('text-change', function(delta, oldDelta, source){
+      var curr = editor.getContents()
+      if (source == 'api') {
+        console.log("An API call triggered this change.");
+      } else if (source == 'user') {
+        var sessionid = socket.io.engine.id
+        console.log("A user action triggered this change.");
+        // socket.emit('client', delta) working
+        var data={  
+            delta : delta,  
+            oldDelta : curr
+        };
+        socket.emit('client', data)
+        console.log("delta:", delta)
+        console.log("oldDelta:", oldDelta)
       }
+    })
 
-      // editor.on('text-change', function(delta, oldDelta, source) {
-      //    if (source == 'api') {
-      //     console.log("An API call triggered this change.");
-      //   } else if (source == 'user') {
-      //     console.log("A user action triggered this change.");
-      //     var delta = editor.getContents()
-      //     var xhr = new XMLHttpRequest();
-      //     xhr.open("POST", '/edit', true);
-      //     xhr.setRequestHeader('Content-Type', 'application/JSON');
-      //     xhr.send(JSON.stringify(delta));
-      //   }
-      // });
+    socket.on('server', function(data){
+        editor.updateContents(data)
+    })
 
-      // var delta = editor.getContents()
-      // document.write(JSON.stringify(delta.ops))
-      // var text = editor.getText()
-      // document.write(text)
+    // function share() {
+    //   var url = window.location.pathname
+    //   var getQuery = url.split('/')
+    // }
 
-      // var xhr = new XMLHttpRequest();
-      // xhr.open("POST", '/edit', true);
-      // xhr.setRequestHeader('Content-Type', 'application/JSON');
-      // xhr.send(JSON.stringify(delta));
-    </script>
+    function proceed () {
+
+      var url = window.location.pathname
+      var getQuery = url.split('/')
+
+      var delta = editor.getContents()
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", '/edit/'+getQuery[2], true);
+      xhr.setRequestHeader('Content-Type', 'application/JSON');
+      xhr.send(JSON.stringify(delta));
+    }
+  </script>
+  <script>
+  // Get the modal
+  var modal = document.getElementById('id01');
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
+  </script>
   </body>
 </html>

@@ -23,7 +23,7 @@ var userSchema = mongoose.Schema({
         type: [{title: String, reference: Object}]
     },
     events: {
-        type:[{title: String, start: String, end: String, description: String}]
+        type:[{_id: false, title: String, start: String, end: String, allDay: String}]
     },
     resetPasswordToken: String,
     resetPasswordExpires: Date

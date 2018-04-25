@@ -56,7 +56,7 @@
 					<a href="#"><i class="fa fa-file-text-o" style="font-size:25px;"> </i> Documents</a>
 				</li>
 				<li>
-					<a href="#"><i class="fa fa-calendar" style="font-size:25px"></i> Agenda</a>
+					<a href="/users/agenda"><i class="fa fa-calendar" style="font-size:25px"></i> Agenda</a>
 				</li>
 				<li>
 					<a href="#"><i class="fa fa-gear" style="font-size:25px;"></i> Settings</a>
@@ -80,29 +80,25 @@
 					
 					<!--fix upload and submit button stuff-->
 					<div style="display: inline" id="upload_button">
-						
-						<!-- <form action="127.0.0.1" method="post" style="display: inline">
-							<input type="file" id="files" class="hidden" onchange="this.form.submit()" name="myFile" />
-							<label id="buttonAlias" for="files">Open File</label>
-						</form> -->
-						<a style = "display: inline" href="/upload">OCR<br/></a>
-						<a style = "display: inline" href="/edit/new">New File<br/></a>
+
+						<!-- <a style = "display: inline" href="/upload">OCR<br/></a> -->
+						<form action="/users/ocr" method="post" style="display: inline"> <input type="file" id="files" class="hidden" onchange="this.form.submit()" name="myFile" /> <label id="buttonAlias" for="files">OCR</label> </form>
+						<a style = "display: inline; position: absolute;" href="/edit/new">New File<br/></a>
 					</div>
 				</div>
-			
-				<!--<script id= "template" >
-					<div class='docName'>
-						<h3 class='movie-title'>
-							{{title}}
-						</h3>
-						<p class='linktoDoc'>
-							{{reference}}
-						</p>
-					</div>
-				</script>-->
 
+				<div  id = "fileInfo">
+						<div id = "file_title">
+							<p>Title</p>
+						</div>
+						<div id = "file_author" >
+							<p>Author</p>
+						</div>
+						<div id = "file_date">
+							<p>Last Modified</p>
+						</div>
+					</div>
 				<div id= "documents">
-				
 				</div>
 			</div>
 		</div>
@@ -133,59 +129,134 @@
 	 
     <script type="text/javascript">
 
-	
+    window.addEventListener( "pageshow", function ( event ) {
+      var historyTraversal = event.persisted || 
+                             ( typeof window.performance != "undefined" && 
+                                  window.performance.navigation.type === 2 );
+      if ( historyTraversal ) {
+        // Handle page restore.
+        window.location.reload();
+      }
+    });
+
 	var decodedJson = decodeURIComponent("{{documents}}");
 	var jsonObj = JSON.parse(decodedJson);
 
 	var e = document.getElementById("documents"); // whatever you want to append the rows to: 
 
 	for(var i = 0; i < jsonObj.length; i++){ 
-		var div = document.createElement("div"); 
+		var filediv = document.createElement("div"); 
 		var temp = document.createElement("i");
-
-		div.className = "docDivs"; 
-		div.id = "docDiv" + i;
-
-		var tempString = "/edit/" + jsonObj[i].reference
+		var buttonDiv = document.createElement("div");
+		var wrapper = document.createElement("div");
+		var button = document.createElement("button");
+		var titleDiv = document.createElement("div");
+		var authorDiv = document.createElement("div");
+		var dateDiv = document.createElement("div");
 		var tag = document.createElement("a");
+		var trashIcon = document.createElement("i");
+		var tempString = "/edit/" + jsonObj[i]._id
+
+		if (jsonObj[i].author == "{{name}}"){
+			var author = "me"
+		} else {
+			var author = jsonObj[i].author
+		}
+
+		titleDiv.style = "display:inline-block; width:50%;";
+		authorDiv.style = "display:inline-block; width:21%; ";
+		dateDiv.style = "display:inline-block; width:19%; ";
+
+		filediv.className = "docDivs";
+		filediv.id = jsonObj[i]._id;
+		wrapper.className = "docButtWrapper";
+		buttonDiv.className = "buttonWrapper";
+		buttonDiv.id = "a"+jsonObj[i]._id;
+
 
 		tag.setAttribute('href',tempString);
 		temp.style = "color:black"
 		temp.innerHTML = " " + jsonObj[i].title;
 		temp.className = "fa fa-file-text-o";
 		tag.appendChild(temp);
+		titleDiv.appendChild(tag);
+		authorDiv.innerHTML = author;
 
-		div.appendChild(tag);
-		e.appendChild(div); 
-		console.log(tag)
+		//add your delete button stuff here
+		trashIcon.className = "fa fa-trash-o";
+		button.appendChild(trashIcon);
+		button.type = "button"
+		button.style = "font-size:15px"
+		button.data = jsonObj[i]
+
+		button.onclick = function(){
+			delDoc(this.data);
+		}
+		// button.addEventListener('click', function(){delDoc(t)})
+
+		// var a = jsonObj[i]
+		// button.onclick = function(){
+		// 	var id = a._id
+		// 	console.log(id)
+
+		// 	// const xhr = new XMLHttpRequest();
+
+		// 	// xhr.open("POST", '/users/dashboard-del');
+		// 	// xhr.setRequestHeader('Content-Type', 'application/JSON');
+		// 	// xhr.send(id);
+
+		// 	var div = document.getElementById(id)
+		// 	if (div){
+		// 		div.parentNode.removeChild(div);
+		// 	}
+		// };
+		//add the date here.
+		docDate = new Date(jsonObj[i].lastModified)
+		nowDate = new Date()
+		if(docDate.getDate() == nowDate.getDate() && docDate.getMonth() == nowDate.getMonth() && 
+			docDate.getFullYear() == nowDate.getFullYear()){
+			dateDiv.innerHTML = docDate.toLocaleTimeString('en-US')
+		} else {
+			dateDiv.innerHTML = docDate.toDateString()
+		}
+		
+		/*dateDiv.innerHTML = some date
+		then attach it to fileDiv AFTER all the previous fileDiv.appendChild*/
+		
+		buttonDiv.appendChild(button);
+		filediv.appendChild(titleDiv);
+		filediv.appendChild(authorDiv);
+		filediv.appendChild(dateDiv);
+		wrapper.appendChild(filediv); 
+		wrapper.appendChild(buttonDiv);
+		e.appendChild(wrapper);
+
 	} 
-	
- 
-  </script> 
 
-  <script>
+	function delDoc(doc){
+		
+		var div = document.getElementById(doc._id)
+		var btndiv = document.getElementById('a'+doc._id)
+		console.log(div)
+		if (div && btndiv){
+			div.parentNode.removeChild(div);
+			btndiv.parentNode.removeChild(btndiv);
+		}
+		console.log(doc._id)
+		const xhr = new XMLHttpRequest();
+
+		xhr.open("POST", 'dashboard');
+		xhr.setRequestHeader('Content-Type', 'application/JSON');
+		xhr.send(JSON.stringify(doc));
+	};
+
+ 	</script> 
+  	<script>
+
 	$(".docDivs").click(function() {
 	window.location = $(this).find("a").attr("href"); 
 	return false;
 	});
-  </script>
-
-	<script>
-	/*var decodedJson = decodeURIComponent("{{documents}}");
-	var jsonObj = JSON.parse(decodedJson);
-
-	var getTemplate = $('#template').html();
-	var compiledFunc = Handlebars.compile(getTemplate);
-	//console.log(jsonObj[0].title)
-	console.log(getTemplate)
-
-	for (var i = 0; i < jsonObj.length; i++ ){
-	var html = compiledFunc(jsonObj[i]);
-	$('#documents').append(html);
-	//console.log(html)
-	//console.log(jsonObj)
-	}*/
-	</script>
-
+  	</script>
 </body>
 </html>

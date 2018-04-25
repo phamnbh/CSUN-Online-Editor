@@ -1,20 +1,35 @@
-{{#if success_msg}}
-	<div class="alert alert-success">{{success_msg}}</div>
-{{/if}}
+<html !doctype>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Forgot-Virtual Version</title>
+    <link rel="stylesheet" href="/stylesheets/forgot.css"/>
+</head>
+<body>
+    <div id = "header">
+        <h1>Virtual Version</h1>
+    </div>
+    <div id = "enter_email_box">
+        {{#if success_msg}}
+            <div class="alert alert-success">{{success_msg}}</div>
+        {{/if}}
+        
+        {{#if error_msg}}
+            <div class="alert alert-danger">{{error_msg}}</div>
+        {{/if}}
+        
+        {{#if error}}
+            <div class="alert alert-danger">{{error}}</div>
+        {{/if}}
+        <form method="POST">
+            <fieldset>
+                <legend>Find your account</legend>
+                <div class="form-group">
+                    <input style="margin-top: 10px" class="form-control" type="text" name="email" autofocus="autofocus" placeholder="Email"/>
+                </div>
+                <a><button id="search_account" class="btn btn-primary" type="submit">Reset Password</button></a>
+            </fieldset>
+        </form>
+    </div>
+</body>
 
-{{#if error_msg}}
-	<div class="alert alert-danger">{{error_msg}}</div>
-{{/if}}
-
-{{#if error}}
-	<div class="alert alert-danger">{{error}}</div>
-{{/if}}
-
-<form method="POST">
-  <legend>Forgot Password</legend>
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input class="form-control" type="text" name="email" autofocus="autofocus"/>
-  </div>
-  <button class="btn btn-primary" type="submit">Reset Password</button>
-</form>
+</html>

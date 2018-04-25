@@ -175,26 +175,63 @@ div.tab button {
 	background-color:D0D0D0;
 }
 
+#fileInfo{
+	margin-top:30px;
+	width: 90%;
+	box-shadow: 0px 6px 6px -6px black;
+}
+
+#file_title{
+	width: 44%;
+	display: inline-block;
+	position: sticky;
+}
+
+#file_author{
+	display:inline-block;
+	width:20%;
+}
+
+#file_date{
+	display:inline-block;
+	width:20%;
+}
+
+.file_headers{
+	margin:auto;
+}
+
 #documents{
 	margin:auto;
-	height:70vh;
-	margin-top:35px;
+	height:67vh;
+	margin-top:0px;
 	overflow:auto;
+	width:100%;
+}
 
+.docButtWrapper{
+	margin:auto;
+	width:100%;
 }
 
 .docDivs{
 	margin:auto;
-	width:100%;
+	width:93%;
 	padding:10px;
 	border-bottom: 1px solid  #e6e6e6;
 	border-top:1px solid  #e6e6e6;
+	display:inline-block;
 }
 
 .docDivs:hover{
 	background: #ffffe6;
-	width:100%;
+	width:93%;
 }
+
+.buttonWrapper{
+	float:right;
+}
+
 
 
 .overlay {

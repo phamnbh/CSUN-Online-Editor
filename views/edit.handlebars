@@ -67,7 +67,7 @@
       
       <!--sidebar Header-->
       <div class="sidebar-header">
-        <h3>Hello, {{username}}</h3>
+        <h3>Hello, {{name}}</h3>
       </div>
       
       <!--Sidebar links-->
@@ -99,7 +99,13 @@
           <div id="editor">
           </div>
           <button type="button" onclick="proceed();">Save</button> 
-          <button type="button" onclick="update();">Socket</button> 
+          <button type="button" onclick="update();">Socket</button>
+          <form method="post" action="/edit/share">
+            </br>
+            <input name="shareWith" type="text" class="form-control" />
+            <br/>
+            <input id="login_button" type="submit" value="Share" />
+          </form>
           <!--fix upload and submit button stuff-->
         </div>
         
@@ -196,6 +202,11 @@
         editor.updateContents(data)
     })
 
+    // function share() {
+    //   var url = window.location.pathname
+    //   var getQuery = url.split('/')
+    // }
+
     function proceed () {
 
       var url = window.location.pathname
@@ -207,6 +218,17 @@
       xhr.setRequestHeader('Content-Type', 'application/JSON');
       xhr.send(JSON.stringify(delta));
     }
+  </script>
+  <script>
+  // Get the modal
+  var modal = document.getElementById('id01');
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
   </script>
   </body>
 </html>

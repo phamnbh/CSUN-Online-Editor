@@ -15,6 +15,10 @@ let articleSchema = mongoose.Schema({
 		type: Object,
 		required: true
 	},
+
+	lastModified:{
+		type: Object
+	}
 });
 
 let Article = module.exports = mongoose.model('Article', articleSchema)
