@@ -15,14 +15,16 @@ router.get('/', function(req, res, next) {
 
 router.post('/', upload.single('userFile'), function (req, res, next) {
 	Tesseract.recognize(req.file.buffer).then(function(result){
-			console.log(result)
+			//console.log(result)
+			console.log("loading...")
 			ocrText = result.text
+			delta = [{insert: result.text}]
 			console.log(result.confidence)
 			
-			res.render('new', { 
-				title: "upload",
-				ocr: ocrText
-			})
+			res.render('edit', { 
+				doc: JSON.stringify(delta),
+				name: req.user.name
+			});
 	})
 })
 

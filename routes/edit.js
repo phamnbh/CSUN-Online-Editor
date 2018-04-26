@@ -95,10 +95,10 @@ router.get('/:id', function(req, res, next) {
     if (room in allClients){
     	allClients[room].numUsers += 1
     	res.render('edit', { 
-		title: 'Virtual Version', 
-		ocr: 'Hello, world!',
-		doc: JSON.stringify(allClients[room].body),
-		name: req.user.name
+			title: 'Virtual Version', 
+			ocr: 'Hello, world!',
+			doc: JSON.stringify(allClients[room].body),
+			name: req.user.name
 		});
     } else {
     	Article.findById(new ObjectId(room), function(err, doc){

@@ -82,7 +82,7 @@
 					<div style="display: inline" id="upload_button">
 
 						<!-- <a style = "display: inline" href="/upload">OCR<br/></a> -->
-						<form action="/users/ocr" method="post" style="display: inline"> <input type="file" id="files" class="hidden" onchange="this.form.submit()" name="myFile" /> <label id="buttonAlias" for="files">OCR</label> </form>
+						<form action="/users/ocr" enctype="multipart/form-data" method="post" style="display: inline"> <input type="file" id="files" class="hidden" onchange="this.form.submit()" name="userFile" /> <label id="buttonAlias" for="files">OCR</label> </form>
 						<a style = "display: inline; position: absolute;" href="/edit/new">New File<br/></a>
 					</div>
 				</div>
