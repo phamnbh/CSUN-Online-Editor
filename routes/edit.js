@@ -4,6 +4,8 @@ var Article = require('../models/article')
 var User = require('../models/users');
 var ObjectId = require('mongoose').Types.ObjectId; 
 var bodyParser = require('body-parser');
+var async = require('async');
+
 
 var socketApi = require('../socketApi');
 var io = socketApi.io;
@@ -61,32 +63,49 @@ io.sockets.on('connection', function(socket) {
 
 /* GET home page. */
 router.get('/new', function(req, res, next) {
-	res.render('new', { 
-		title: 'Virtual Version', 
-		ocr: 'Hello, world!',
-		name: req.user.name
-	});
+	// res.render('new', { 
+	// 	title: 'Virtual Version', 
+	// 	ocr: 'Hello, world!',
+	// 	name: req.user.name
+	// });
+	let article = new Article()
+      article.title = "Untitled Document"
+      article.author = req.user.name
+      article.body = ""
+
+      article.save(function(err){
+        if(err){
+          console.log(err)
+          return
+        } else {
+          console.log(article)
+          var doc = {"title": article.title, "reference":article.id}
+          req.user.documents.push(doc)
+          req.user.save()
+          res.redirect('/edit/'+article.id)
+        }
+      })
 });
 
-router.post('/new', function(req, res, next) {
-	console.log(req.body)
-	let article = new Article()
-	article.title = req.body.title
-	article.author = req.user.name
-	article.body = req.body.content
-	console.log(article)
-	article.save(function(err){
-		if(err){
-			console.log(err)
-			return
-		} else {
-			console.log(article)
-			var doc = {"title": article.title, "reference":article.id}
-			req.user.documents.push(doc)
-			req.user.save()
-		}
-	})
-})
+// router.post('/new', function(req, res, next) {
+// 	console.log(req.body)
+// 	let article = new Article()
+// 	article.title = req.body.title
+// 	article.author = req.user.name
+// 	article.body = req.body.content
+// 	console.log(article)
+// 	article.save(function(err){
+// 		if(err){
+// 			console.log(err)
+// 			return
+// 		} else {
+// 			console.log(article)
+// 			var doc = {"title": article.title, "reference":article.id}
+// 			req.user.documents.push(doc)
+// 			req.user.save()
+// 		}
+// 	})
+// })
 
 router.get('/:id', function(req, res, next) {
 	let id = req.params.id
@@ -95,7 +114,7 @@ router.get('/:id', function(req, res, next) {
     if (room in allClients){
     	allClients[room].numUsers += 1
     	res.render('edit', { 
-			title: 'Virtual Version', 
+			title: JSON.stringify(allClients[room].title), 
 			ocr: 'Hello, world!',
 			doc: JSON.stringify(allClients[room].body),
 			name: req.user.name
@@ -108,9 +127,10 @@ router.get('/:id', function(req, res, next) {
 	        		if(!doc){
 	        			console.log("not found")
 	        		} else{
+	        			console.log(allClients[room].title)
 	        			allClients[room] = {body:doc.body, numUsers: 1}
 	        			res.render('edit', { 
-	        			title: 'Virtual Version', 
+	        			title: JSON.stringify(allClients[room].title), 
 	        			ocr: 'Hello, world!',
 	        			doc: JSON.stringify(doc.body.ops),
 	        			name: req.user.name
@@ -123,8 +143,81 @@ router.get('/:id', function(req, res, next) {
 })
 
 router.post('/share', function(req, res, next) {
-	console.log("post share" ,req)
-	res.redirect('/')
+	var shareWith = req.body.shareWith.split(',')
+	var id = req.body.docId
+	
+	async.eachSeries(shareWith, function(email, callback){
+		async.waterfall([
+			function(done){
+				fixedEmail = email.replace(/ /g,"")
+				console.log(fixedEmail + "func 1")
+				done(null, fixedEmail);
+			},
+			function(n, done){
+				User.findOne({email:n}, function(err, user){
+					if(err){
+						console.log(err)
+					}
+					console.log("func 2 done")
+					done(null, user)
+				})
+			},
+			function(user, done){
+				console.log("func3", id, user.username)
+				Article.findById(new ObjectId(id), function(err, doc){
+					if(err){
+						console.log(err)
+					}
+					var doc = {"title": doc.title, "reference":doc.id}
+					user.documents.push(doc)
+				    user.save()
+				    console.log("saved")
+				})
+			}
+		],function(err) {
+		    if (err) return next(err);
+		    res.redirect('forgot');
+		  })
+		callback()
+	})
+	console.log("done")
+	// async.each(shareWith, function(email){
+	// 	//BUGGY
+	// 	//Problem: find is async
+	// 	//Solution: use async waterfall
+	// 	async.waterfall([
+	// 		function(done){
+	// 			email = email.replace(/ /g,"")
+	// 			console.log('email: ' + email)
+	// 			done(email)
+	// 			console.log("email end")
+	// 		},
+	// 		function(email, done){
+	// 			console.log('user start')
+	// 			User.fineOne({email:email}, function(user, err){
+	// 				if(err){
+	// 					console.log(err)
+	// 				}
+	// 				console.log('find user')
+	// 				done(user)
+	// 			})
+	// 		},
+	// 		function(user, done){
+	// 			if(err){
+	// 				console.log(err)
+	// 			}
+	// 			console.log('find article')
+	// 			Article.findById(new ObjectId(id), function(err, doc){
+	// 				if(err){
+	// 					console.log(err)
+	// 				}
+	// 				var doc = {"title": doc.title, "reference":doc.id}
+	// 				user.documents.push(doc)
+	// 			    user.save()
+	// 			})
+	// 		}
+	// 	])
+	// })
 })
 
 router.post('/:id', function(req, res, next) {

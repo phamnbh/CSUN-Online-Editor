@@ -91,6 +91,22 @@ body{
     width: 100%;
 }
 
+#title_and_doc{
+	margin:auto;
+	max-width:60vw;
+	height:86vh;
+}
+
+#title{
+	border:0;
+	background: #fafafa; 
+}
+
+#title:hover{
+	border:1px solid #e6e6e6;
+	background: #fafafa;
+}
+
 #upload_open_new{
 	border:1px #f4f4f4 solid;
 	margin: auto;
@@ -209,4 +225,3 @@ div.tab button {
         margin-left: 0px;
     }
 }
-

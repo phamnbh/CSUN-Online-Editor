@@ -89,33 +89,38 @@ router.post('/agenda-del', function(req,res) {
 })
 
 router.post('/ocr', upload.single('userFile'), function (req, res) {
-  Tesseract.recognize(req.file.buffer).then(function(result){
-      //console.log(result)
-      console.log("loading...")
-      ocrText = result.text
-      delta = {ops:[{insert: result.text}]}
-      console.log(result.confidence)
+  Tesseract.recognize(req.file.buffer)
+    .progress(message => console.log(message))
+    .catch(err => console.error(err))
+    .then(result => console.log(result.text))
+    .finally(resultOrError => console.log(resultOrError))
+  // Tesseract.recognize(req.file.buffer).then(function(result){
+  //     //console.log(result)
+  //     console.log("loading...")
+  //     ocrText = result.text
+  //     delta = {ops:[{insert: result.text}]}
+  //     console.log(result.confidence)
 
-      let article = new Article()
-      article.title = "Untitled Document"
-      article.author = req.user.name
-      article.body = delta
+  //     let article = new Article()
+  //     article.title = "Untitled Document"
+  //     article.author = req.user.name
+  //     article.body = delta
 
-      let id = ""
+  //     let id = ""
 
-      article.save(function(err){
-        if(err){
-          console.log(err)
-          return
-        } else {
-          console.log(article)
-          var doc = {"title": article.title, "reference":article.id}
-          req.user.documents.push(doc)
-          req.user.save()
-          res.redirect('/edit/'+article.id)
-        }
-      })
-  })
+  //     article.save(function(err){
+  //       if(err){
+  //         console.log(err)
+  //         return
+  //       } else {
+  //         console.log(article)
+  //         var doc = {"title": article.title, "reference":article.id}
+  //         req.user.documents.push(doc)
+  //         req.user.save()
+  //         res.redirect('/edit/'+article.id)
+  //       }
+  //     })
+  // })
 })
 
 router.get('/signup', function(req, res){

@@ -89,35 +89,36 @@
     </nav>
     <!--content-->
     <div id="content">
-      
-      <div id="upload_open_new">
-        <div id="UON_position">
-          <!-- <div id="toolbar"> -->
-            <!-- <button class="ql-bold">Bold</button>
-            <button class="ql-italic">Italic</button>
-            </div> -->
-          <div id="editor">
-          </div>
-          <button type="button" onclick="proceed();">Save</button> 
-          <button type="button" onclick="update();">Socket</button>
-          <form method="post" action="/edit/share">
-            </br>
-            <input name="shareWith" type="text" class="form-control" />
-            <br/>
-            <input id="login_button" type="submit" value="Share" />
-          </form>
-          <!--fix upload and submit button stuff-->
-        </div>
+     <div id ="title_and_doc">
+            <input type="text" name="title" id="title" style="font-size: 24px" placeholder="Untitled Document" value="{{title}}"> 
+        <div id="upload_open_new">
         
-        <div id="user_docs">
-          {{#each documents}}
-            <a href="/edit/{{this.reference}}">{{this.title}}<br/></a>
-          {{/each}}
-          <!--<div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'London')">Recent</button>
-            <button class="tablinks" onclick="openCity(event, 'Tokyo')">Shared with me</button>
-          </div>-->
-        </div>
+          <div id="UON_position">
+            <!-- <div id="toolbar"> -->
+              <!-- <button class="ql-bold">Bold</button>
+              <button class="ql-italic">Italic</button>
+              </div> --> 
+            <div id="editor">
+            </div>
+            <form method="post" action="/edit/share">
+              </br>
+              <input id="shareWith" type="text" class="form-control" />
+              <br/>
+              <input id="login_button" type="button" onclick=share() value="Share" />
+            </form>
+            <!--fix upload and submit button stuff-->
+          </div>
+          
+          <div id="user_docs">
+            {{#each documents}}
+              <a href="/edit/{{this.reference}}">{{this.title}}<br/></a>
+            {{/each}}
+            <!--<div class="tab">
+              <button class="tablinks" onclick="openCity(event, 'London')">Recent</button>
+              <button class="tablinks" onclick="openCity(event, 'Tokyo')">Shared with me</button>
+            </div>-->
+          </div>
+      </div>
         
       </div>
     </div>
@@ -228,6 +229,23 @@
       if (event.target == modal) {
           modal.style.display = "none";
       }
+  }
+  </script>
+
+  <script>
+  function share(){
+    console.log('share')
+    var url = window.location.pathname
+    var getQuery = url.split('/')
+    var shareWith = document.getElementById('shareWith').value
+    var docId = getQuery[2]
+
+    shareJSON = {shareWith:shareWith, docId:docId}
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/edit/share', true);
+    xhr.setRequestHeader('Content-Type', 'application/JSON');
+    xhr.send(JSON.stringify(shareJSON));
   }
   </script>
   </body>
