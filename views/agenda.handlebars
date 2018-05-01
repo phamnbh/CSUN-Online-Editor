@@ -107,6 +107,116 @@
          })
     </script>
 </head>
+
+<html !DOCTYPE>
+<head>
+    <title>Virtual Version-Home</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <!-- <link rel="stylesheet" href="sidebar.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--    <link rel='stylesheet' href='/stylesheets/style.css'/>-->   
+    <link rel="stylesheet" href="/stylesheets/sidebar.css">
+</head>
+<body>
+    <div class="wrapper" id="sidebar_content">
+    
+        <nav class="navbar navbar-inverse" id="navbar_top">
+            <div class="container-fluid" id="navbar_container">             
+                <!--top left-->
+                <div class="navbar-header">
+                    <!--side bar toggle button-->
+                    <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn navbar-left">
+                    <i class="glyphicon glyphicon-align-left"></i>
+                    </button>
+                    
+                    <!--logo-->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+                        <span class="icon-bar"> </span> <!--the hamburger icon for collpsing-->
+                        <span class="icon-bar"> </span>
+                        <span class="icon-bar"> </span>
+                    </button>
+                    <a href="/users/dashboard" class="navbar-brand">Virtual Version</a>
+                </div>
+                
+                <!--menu items-->
+                <div class="collapse navbar-collapse" id="mainNavBar"> <!--id for the data-target="mainNavBar"-->
+                </div>
+            </div>
+        </nav>
+        
+        <!--sidebar-->
+        <nav id="sidebar">
+            
+            <!--sidebar Header-->
+            <div class="sidebar-header">
+                <h3>Hello, {{name}}</h3>
+            </div>
+            
+            <!--Sidebar links-->
+            <ul class="list-unstyled components">
+                <li >
+                    <a href="/users/dashboard"><i class="fa fa-file-text-o" style="font-size:25px;"> </i> Documents</a>
+                </li>
+                <li>
+                    <a href="/users/agenda"><i class="fa fa-calendar" style="font-size:25px"></i> Agenda</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-gear" style="font-size:25px;"></i> Settings</a>
+                </li>
+                <li>
+                    <a href="/users/logout"><i class="fa fa-power-off" style="font-size:24px"></i> Logout</a>
+                </li>
+            </ul>
+            
+        </nav>
+        <!--content-->
+        <div id="content">
+            
+            <div id="upload_open_new">
+                <div id = 'calendar'>
+                </div>
+                <!--Modal-->
+                <div id="calendarModal" class="modal fade" role = "dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                                <h3>Create Event</h3>
+                            </div>
+                            <div class = "modal-body">
+                                <form action = "submitEventData" type = "post" >
+                                    <div class = "form-group">
+                                        <label style = "display: inline" >Event Name: </label>
+                                        <input id="eventName" type="text" name="eventName" placeholder="Event Name" />
+                                    </div>
+                                    <div class = "form-group">
+                                        <label for = "when" >When:</label>
+                                        <div style = "display: inline" id = "when">Hello</div>
+                                    </div>
+                                    <div style = "display: none" class = "form-group">
+                                        <input  id = "eventStartTime" type="text" name="eventStartTime"/>
+                                    </div>
+                                    <div style = "display: none" class = "form-group">
+                                        <input  id = "eventEndTime" type="text" name="eventEndTime"/>
+                                    </div>
+                                    <div style = "display: none" class = "form-group">
+                                        <input id = "eventAllDay" type="text" name="eventAllDay"/>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <!--take off onclick for type = "submit"  -->
+                                        <button type = "submit" class="btn btn-primary" id="submitButton">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <body>
     <div id = 'calendar'>
     </div>

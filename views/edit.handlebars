@@ -47,15 +47,15 @@
             <span class="icon-bar"> </span>
             <span class="icon-bar"> </span>
           </button>
-          <a href="#" class="navbar-brand">Virtual Version</a>
+          <a href="/users/dashboard" class="navbar-brand">Virtual Version</a>
         </div>
         
         <!--menu items-->
         <div class="collapse navbar-collapse" id="mainNavBar"> <!--id for the data-target="mainNavBar"-->
           <ul class="nav navbar-nav" id="temp">
-            <li class="active"><a href="/users/dashboard">Home</a></li> <!--high lights the page the user is on-->
-            <li><a href="#">About</a></li>  <!--multiple pages cannot be active at the same time-->
-            <li><a href="#">Contact</a></li>
+            <li><a href="/edit/new">New file</a></li>  <!--multiple pages cannot be active at the same time-->
+            <li><a id="myBtn">Share</a></li>
+            <li><a href="" onclick="down()">Download</a></li>
             
           </ul>
         </div>
@@ -90,7 +90,7 @@
     <!--content-->
     <div id="content">
      <div id ="title_and_doc">
-            <input type="text" name="title" id="title" style="font-size: 24px" placeholder="Untitled Document" value="{{title}}"> 
+            <input type="text" name="title" id="title" style="font-size: 24px" placeholder="Untitled Document" value="{{title}}" onblur="changeTitle()"> 
         <div id="upload_open_new">
         
           <div id="UON_position">
@@ -100,12 +100,6 @@
               </div> --> 
             <div id="editor">
             </div>
-            <form method="post" action="/edit/share">
-              </br>
-              <input id="shareWith" type="text" class="form-control" />
-              <br/>
-              <input id="login_button" type="button" onclick=share() value="Share" />
-            </form>
             <!--fix upload and submit button stuff-->
           </div>
           
@@ -122,6 +116,22 @@
         
       </div>
     </div>
+  </div>
+
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>Share with others</p>
+      <form method="post" action="/edit/share">
+        </br>
+        <input id="shareWith" type="text" placeholder="Enter email addresses..." class="form-control" />
+        <br/>
+        <input id="login_button" type="button" onclick=share() value="Share" />
+      </form>
+    </div>
+
   </div>
   
   <!-- jQuery CDN -->
@@ -208,16 +218,17 @@
     //   var getQuery = url.split('/')
     // }
 
-    function proceed () {
+    function changeTitle () {
 
       var url = window.location.pathname
       var getQuery = url.split('/')
 
-      var delta = editor.getContents()
+      var title = {title:document.getElementById('title').value}
+      console.log(title.title)
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", '/edit/'+getQuery[2], true);
+      xhr.open("POST", '/edit/'+getQuery[2]+'/changeTitle', true);
       xhr.setRequestHeader('Content-Type', 'application/JSON');
-      xhr.send(JSON.stringify(delta));
+      xhr.send(JSON.stringify(title));
     }
   </script>
   <script>
@@ -239,6 +250,8 @@
     var getQuery = url.split('/')
     var shareWith = document.getElementById('shareWith').value
     var docId = getQuery[2]
+    var modal = document.getElementById('myModal');
+    modal.style.display = "none";
 
     shareJSON = {shareWith:shareWith, docId:docId}
 
@@ -246,6 +259,48 @@
     xhr.open("POST", '/edit/share', true);
     xhr.setRequestHeader('Content-Type', 'application/JSON');
     xhr.send(JSON.stringify(shareJSON));
+  }
+
+  </script>
+  <script type="text/javascript">
+    function down(){
+      var url = window.location.pathname
+      var getQuery = url.split('/')
+      var docId = getQuery[2]
+      
+      var download = {id: docId}
+      
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", '/edit/download/', true);
+      xhr.setRequestHeader('Content-Type', 'application/JSON');
+      xhr.send(JSON.stringify(download));
+    }
+  </script>
+  <script>
+  // Get the modal
+  var modal = document.getElementById('myModal');
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = function() {
+      modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
   }
   </script>
   </body>

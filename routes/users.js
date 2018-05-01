@@ -60,7 +60,7 @@ router.post('/dashboard', function(req, res){
 
 router.get('/agenda', function(req, res){
   console.log(req.user.events)
-  res.render('agenda', {events:req.user.events})
+  res.render('agenda', {events:req.user.events, name: req.user.name})
 })
 
 router.post('/agenda', function(req, res){

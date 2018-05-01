@@ -33,9 +33,8 @@
 				<!--menu items-->
 				<div class="collapse navbar-collapse" id="mainNavBar"> <!--id for the data-target="mainNavBar"-->
 					<ul class="nav navbar-nav" id="temp">
-						<li class="active"><a href="#">Home</a></li> <!--high lights the page the user is on-->
-						<li><a href="#">About</a></li>  <!--multiple pages cannot be active at the same time-->
-						<li><a href="#">Contact</a></li>
+						<li><a href="/edit/new">New file</a></li>  <!--multiple pages cannot be active at the same time-->
+						<!-- <li><a href="#">OCR</a></li> -->
 						
 					</ul>
 				</div>
@@ -53,7 +52,7 @@
 			<!--Sidebar links-->
 			<ul class="list-unstyled components">
 				<li >
-					<a href="#"><i class="fa fa-file-text-o" style="font-size:25px;"> </i> Documents</a>
+					<a href="/users/dashboard"><i class="fa fa-file-text-o" style="font-size:25px;"> </i> Documents</a>
 				</li>
 				<li>
 					<a href="/users/agenda"><i class="fa fa-calendar" style="font-size:25px"></i> Agenda</a>
@@ -83,22 +82,24 @@
 
 						<!-- <a style = "display: inline" href="/upload">OCR<br/></a> -->
 						<form action="/users/ocr" enctype="multipart/form-data" method="post" style="display: inline"> <input type="file" id="files" class="hidden" onchange="this.form.submit()" name="userFile" /> <label id="buttonAlias" for="files">OCR</label> </form>
-						<a style = "display: inline; position: absolute;" href="/edit/new">New File<br/></a>
-					</div>
+<!-- 						<a style = "display: inline; position: absolute;" href="/edit/new">New File<br/></a>
+ -->					</div>
 				</div>
 
-				<div  id = "fileInfo">
-						<div id = "file_title">
-							<p>Title</p>
+				<div id="documentWrapper">
+					<div  id = "fileInfo">
+							<div id = "file_title">
+								<p>Title</p>
+							</div>
+							<div id = "file_author" >
+								<p>Author</p>
+							</div>
+							<div id = "file_date">
+								<p>Last Modified</p>
+							</div>
 						</div>
-						<div id = "file_author" >
-							<p>Author</p>
-						</div>
-						<div id = "file_date">
-							<p>Last Modified</p>
-						</div>
+					<div id= "documents">
 					</div>
-				<div id= "documents">
 				</div>
 			</div>
 		</div>
@@ -173,6 +174,9 @@
 		buttonDiv.className = "buttonWrapper";
 		buttonDiv.id = "a"+jsonObj[i]._id;
 
+		wrapper.style = "border: 1px solid #e6e6e6"
+		wrapper.id = "b"+jsonObj[i]._id;
+
 
 		tag.setAttribute('href',tempString);
 		temp.style = "color:black"
@@ -186,30 +190,12 @@
 		trashIcon.className = "fa fa-trash-o";
 		button.appendChild(trashIcon);
 		button.type = "button"
-		button.style = "font-size:15px"
+		button.style = "font-size:15px; margin-top: 10px; margin-right: 20px"
 		button.data = jsonObj[i]
 
 		button.onclick = function(){
 			delDoc(this.data);
 		}
-		// button.addEventListener('click', function(){delDoc(t)})
-
-		// var a = jsonObj[i]
-		// button.onclick = function(){
-		// 	var id = a._id
-		// 	console.log(id)
-
-		// 	// const xhr = new XMLHttpRequest();
-
-		// 	// xhr.open("POST", '/users/dashboard-del');
-		// 	// xhr.setRequestHeader('Content-Type', 'application/JSON');
-		// 	// xhr.send(id);
-
-		// 	var div = document.getElementById(id)
-		// 	if (div){
-		// 		div.parentNode.removeChild(div);
-		// 	}
-		// };
 		//add the date here.
 		docDate = new Date(jsonObj[i].lastModified)
 		nowDate = new Date()
@@ -237,10 +223,12 @@
 		
 		var div = document.getElementById(doc._id)
 		var btndiv = document.getElementById('a'+doc._id)
+		var delDiv = document.getElementById('b'+doc._id)
 		console.log(div)
 		if (div && btndiv){
 			div.parentNode.removeChild(div);
 			btndiv.parentNode.removeChild(btndiv);
+			delDiv.parentNode.removeChild(delDiv);
 		}
 		console.log(doc._id)
 		const xhr = new XMLHttpRequest();

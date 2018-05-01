@@ -5,6 +5,8 @@ var User = require('../models/users');
 var ObjectId = require('mongoose').Types.ObjectId; 
 var bodyParser = require('body-parser');
 var async = require('async');
+var pdf = require('pdfkit');
+var fs = require('fs');
 
 
 var socketApi = require('../socketApi');
@@ -43,7 +45,6 @@ io.sockets.on('connection', function(socket) {
 	        	allClients[room].numUsers -= 1
 	        	console.log(room, allClients[room])
 	        	if (allClients[room].numUsers == 0){
-	        		console.log('yo')
 	        		Article.findById(new ObjectId(room), function(err, doc){
 	        			doc.body = allClients[room].body
 	        			doc.lastModified = new Date()
@@ -127,10 +128,9 @@ router.get('/:id', function(req, res, next) {
 	        		if(!doc){
 	        			console.log("not found")
 	        		} else{
-	        			console.log(allClients[room].title)
 	        			allClients[room] = {body:doc.body, numUsers: 1}
 	        			res.render('edit', { 
-	        			title: JSON.stringify(allClients[room].title), 
+	        			title: doc.title,
 	        			ocr: 'Hello, world!',
 	        			doc: JSON.stringify(doc.body.ops),
 	        			name: req.user.name
@@ -140,6 +140,33 @@ router.get('/:id', function(req, res, next) {
 	        	}
         })
     }
+})
+
+router.post('/download', function(req,res,next) {
+	var docId = req.body.id
+	console.log("totototortor" + docId)
+
+	Article.findById(new ObjectId(docId), function(err, doc){
+		if (err) {
+			return handleError(err)
+		} else {
+			if(!doc){
+				console.log("not found")
+			} else{
+				var toDownload = new pdf
+				var text = doc.body.ops[0].insert
+
+				toDownload.pipe(fs.createWriteStream(doc.title));
+				toDownload.pipe(res)
+				toDownload.font('Times-Roman')
+				.fontSize(12)
+				.text(text)
+
+				toDownload.end()
+
+			}
+		}
+	})
 })
 
 router.post('/share', function(req, res, next) {
@@ -218,6 +245,17 @@ router.post('/share', function(req, res, next) {
 	// 		}
 	// 	])
 	// })
+})
+
+router.post('/:id/changeTitle', function(req,res,next){
+	let id = req.params.id
+	var title = req.body.title
+	
+	Article.update({_id:id},{
+		title: title
+	}, function(err, affected, resp) {
+		console.log(resp);	
+	})
 })
 
 router.post('/:id', function(req, res, next) {
