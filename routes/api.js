@@ -102,6 +102,10 @@ router.get('/:id', function(req, res, next) {
     })
 })
 
+router.post('/upload', function(req, res, next){
+	console.log(req.body)
+})
+
 module.exports = router;
 
 //////////////////////////////////////////////////////////////////
