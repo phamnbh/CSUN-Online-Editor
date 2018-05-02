@@ -3,15 +3,17 @@ var router = express.Router();
 var User = require('../models/users');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-let Article = require('../models/article')
+var Article = require('../models/article')
 var jwt = require('jsonwebtoken');
 var bodyParser = require('body-parser');
 var config = require('../config/main');
+var ObjectId = require('mongoose').Types.ObjectId; 
+
 
 require('../config/passport-jwt.js')(passport);
 
 router.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
-  res.send('It worked! User id is: ' + req.user+ '.');
+  res.send(req.user);
 });
 
 
@@ -88,6 +90,17 @@ router.post('/login', function(req, res) {
     }
   });
 });
+
+router.post('/getDoc', function(req, res, next) {
+	var id = req.body.id
+    Article.findById(new ObjectId(id), function(err, doc){
+    	if(err){
+    		console.log(err)
+    	} else {
+    		res.send(JSON.stringify(doc.body))
+    	}
+    })
+})
 
 module.exports = router;
 
