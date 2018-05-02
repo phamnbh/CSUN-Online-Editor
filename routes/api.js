@@ -91,8 +91,8 @@ router.post('/login', function(req, res) {
   });
 });
 
-router.post('/getDoc', function(req, res, next) {
-	var id = req.body.id
+router.get('/:id', function(req, res, next) {
+	var id = req.params.id
     Article.findById(new ObjectId(id), function(err, doc){
     	if(err){
     		console.log(err)
