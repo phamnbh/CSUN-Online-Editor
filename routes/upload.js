@@ -15,7 +15,6 @@ router.get('/', function(req, res, next) {
 
 router.post('/', upload.single('userFile'), function (req, res, next) {
 	Tesseract.recognize(req.file.buffer).then(function(result){
-			//console.log(result)
 			console.log("loading...")
 			ocrText = result.text
 			delta = [{insert: result.text}]

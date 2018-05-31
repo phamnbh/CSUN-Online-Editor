@@ -22,7 +22,6 @@ router.get('/dashboard', passport.authenticate('jwt', { session: false }), funct
   res.send(req.user);
 });
 
-
 // Register new users
 router.post('/register', function(req, res) {
 	var name = req.body.name;
@@ -65,9 +64,6 @@ router.post('/register', function(req, res) {
 			}
 			console.log(user)
 		})
-
-		// req.flash('success_msg', 'Registration Complete!')
-		// res.redirect('/users/login')
 	}
 
 	console.log(name)
@@ -121,134 +117,7 @@ router.post('/upload', upload.any(), function (req, res) {
       delta = {ops:[{insert: result.text}]}
       console.log(result.confidence)
       res.send(delta)
-
-      // let article = new Article()
-      // article.title = "Untitled Document"
-      // article.author = req.user.name
-      // article.body = delta
-
-      // let id = ""
-
-      // article.save(function(err){
-      //   if(err){
-      //     console.log(err)
-      //     return
-      //   } else {
-      //     console.log(article)
-      //     var doc = {"title": article.title, "reference":article.id}
-      //     req.user.documents.push(doc)
-      //     req.user.save()
-      //     res.redirect('/edit/'+article.id)
-      //   }
-      // })
   })
-  // console.log(req.files)
-  // var a = {files: req.files, yo: "YOOOOOOOOOO"}
-  // res.send(a)
 })
 
 module.exports = router;
-
-//////////////////////////////////////////////////////////////////
-// router.get('/signup', function(req, res){
-// 	res.render('signup');
-// });
-
-// // Login
-// router.get('/login', function(req, res){
-// 	res.render('login');
-// });
-
-// router.post('/signup', function(req, res){
-// 	var name = req.body.name;
-// 	var email = req.body.email;
-// 	var username = req.body.username;
-// 	var password = req.body.password;
-// 	var password2 = req.body.password2;
-
-// 	//Validation
-// 	req.checkBody('name', 'Name is required').notEmpty();
-// 	req.checkBody('email', 'Email is required').notEmpty();
-// 	req.checkBody('email', 'Email is not valid').isEmail();
-// 	req.checkBody('username', 'Username is required').notEmpty();
-// 	req.checkBody('password', 'Password is required').notEmpty();
-// 	req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
-
-// 	var errors = req.validationErrors();
-
-// 	if(errors){
-// 		console.log("errors")
-// 		res.render('signup', {
-// 			errors : errors
-// 		})
-// 	} else {
-// 		var newUser = new User({
-// 			name: name,
-// 			email: email,
-// 			username: username,
-// 			password: password
-// 		})
-
-// 		User.createUser(newUser, function(err, user){
-// 			if(err) throw err
-// 			console.log(user)
-// 		})
-
-// 		req.flash('success_msg', 'Registration Complete!')
-// 		res.redirect('/users/login')
-// 	}
-
-// 	console.log(name)
-// });
-
-// passport.use(new LocalStrategy(
-// 	function(username, password, done) {
-// 		console.log("hi")
-// 		User.getUserByUsername(username, function(err, user){
-// 			if(err) throw err;
-// 			if(!user){
-// 				return done(null, false, {message: 'Unknown User'})
-// 			}
-
-// 			User.comparePassword(password, user.password, function(err, isMatch){
-// 				if(err) throw err
-// 				if(isMatch){
-// 					return done(null, user)
-// 				} else {
-// 					return done(null, false, {message: "Invalid Password"})
-// 				}
-// 			})
-// 		})
-// 	}
-// ));
-
-// passport.serializeUser(function(user, done) {
-// 	done(null, user.id);
-// });
-
-// passport.deserializeUser(function(id, done) {
-// 	User.getUserById(id, function(err, user) {
-// 		done(err, user);
-// 	});
-// });
-
-// // router.post('/login',
-// // 	passport.authenticate('local', {successRedirect: '/', failureRedirect: 'login',failureFlash: true }),function(req, res) {res.redirect('/')});
-
-// router.post('/login',
-// 	passport.authenticate('local', {
-// 		successRedirect:'/users/dashboard',
-// 		failureRedirect:'/users/login',
-// 		failureFlash: true
-// 	}),function(req, res) {
-// 			res.redirect('/users/dashboard')
-// });
-
-
-// router.get('/logout', function(req, res){
-// 	req.logout();
-// 	req.flash('success_msg', 'You are logged out');
-// 	res.redirect('/users/login');
-// });
-
-// module.exports = router;

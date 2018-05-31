@@ -62,13 +62,9 @@ io.sockets.on('connection', function(socket) {
 });
 
 
-/* GET home page. */
+//Route for new document
 router.get('/new', function(req, res, next) {
-	// res.render('new', { 
-	// 	title: 'Virtual Version', 
-	// 	ocr: 'Hello, world!',
-	// 	name: req.user.name
-	// });
+
 	let article = new Article()
       article.title = "Untitled Document"
       article.author = req.user.name
@@ -88,26 +84,8 @@ router.get('/new', function(req, res, next) {
       })
 });
 
-// router.post('/new', function(req, res, next) {
-// 	console.log(req.body)
-// 	let article = new Article()
-// 	article.title = req.body.title
-// 	article.author = req.user.name
-// 	article.body = req.body.content
-// 	console.log(article)
-// 	article.save(function(err){
-// 		if(err){
-// 			console.log(err)
-// 			return
-// 		} else {
-// 			console.log(article)
-// 			var doc = {"title": article.title, "reference":article.id}
-// 			req.user.documents.push(doc)
-// 			req.user.save()
-// 		}
-// 	})
-// })
 
+//Route to get existing documents
 router.get('/:id', function(req, res, next) {
 	let id = req.params.id
 	var room = id
@@ -142,9 +120,10 @@ router.get('/:id', function(req, res, next) {
     }
 })
 
+
+//Route that converts the delta object which contains the text into a pdf file
 router.post('/download', function(req,res,next) {
 	var docId = req.body.id
-	console.log("totototortor" + docId)
 
 	Article.findById(new ObjectId(docId), function(err, doc){
 		if (err) {
@@ -169,28 +148,30 @@ router.post('/download', function(req,res,next) {
 	})
 })
 
+//Route to hand the sharing documents between users
 router.post('/share', function(req, res, next) {
 	var shareWith = req.body.shareWith.split(',')
 	var id = req.body.docId
 	
 	async.eachSeries(shareWith, function(email, callback){
 		async.waterfall([
+			//format email for use in db query
 			function(done){
 				fixedEmail = email.replace(/ /g,"")
-				console.log(fixedEmail + "func 1")
 				done(null, fixedEmail);
 			},
+			//find the user with the given email
 			function(n, done){
 				User.findOne({email:n}, function(err, user){
 					if(err){
 						console.log(err)
 					}
-					console.log("func 2 done")
 					done(null, user)
 				})
 			},
+			//Add the document to the users "documents" list
+			//This allows for the user to access the documents
 			function(user, done){
-				console.log("func3", id, user.username)
 				Article.findById(new ObjectId(id), function(err, doc){
 					if(err){
 						console.log(err)
@@ -208,45 +189,9 @@ router.post('/share', function(req, res, next) {
 		callback()
 	})
 	console.log("done")
-	// async.each(shareWith, function(email){
-	// 	//BUGGY
-	// 	//Problem: find is async
-	// 	//Solution: use async waterfall
-	// 	async.waterfall([
-	// 		function(done){
-	// 			email = email.replace(/ /g,"")
-	// 			console.log('email: ' + email)
-	// 			done(email)
-	// 			console.log("email end")
-	// 		},
-	// 		function(email, done){
-	// 			console.log('user start')
-	// 			User.fineOne({email:email}, function(user, err){
-	// 				if(err){
-	// 					console.log(err)
-	// 				}
-	// 				console.log('find user')
-	// 				done(user)
-	// 			})
-	// 		},
-	// 		function(user, done){
-	// 			if(err){
-	// 				console.log(err)
-	// 			}
-	// 			console.log('find article')
-	// 			Article.findById(new ObjectId(id), function(err, doc){
-	// 				if(err){
-	// 					console.log(err)
-	// 				}
-	// 				var doc = {"title": doc.title, "reference":doc.id}
-	// 				user.documents.push(doc)
-	// 			    user.save()
-	// 			})
-	// 		}
-	// 	])
-	// })
 })
 
+//Route to change the title of the Document
 router.post('/:id/changeTitle', function(req,res,next){
 	let id = req.params.id
 	var title = req.body.title
