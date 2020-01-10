@@ -19,13 +19,27 @@ var ocrText = ''
 
 
 router.get('/dashboard', function(req, res, next) {
+  console.log("We them boys1");
+
 	if(req.user){
     var ids = []
 
+    console.log("we the user id: ", req.user._id);
+    console.log("we the user email: ", req.email);
+    console.log("number of documents user has: ", req.user.documents.length);
+
     for (var i = 0; i < req.user.documents.length; i++) {
+      console.log("Do we ever run?");
       var id = req.user.documents[i].reference
       ids.push(id)
     }
+
+    console.log("Number of documents in array ids: ", ids.length);
+    console.log("The ids: \n");
+
+    ids.forEach(element => {
+      console.log(typeof element)
+    });
 
     Article.find({
       '_id' : {$in : ids}
@@ -38,6 +52,7 @@ router.get('/dashboard', function(req, res, next) {
       });
     })
 	} else {
+    console.log("we them boys2");
     res.redirect('/')
 	}
 });

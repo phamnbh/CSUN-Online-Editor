@@ -7,6 +7,11 @@ var bodyParser = require('body-parser');
 var async = require('async');
 var pdf = require('pdfkit');
 var fs = require('fs');
+var mongoose = require('mongoose');
+
+//////EDITS////
+
+
 
 
 var socketApi = require('../socketApi');
@@ -63,25 +68,52 @@ io.sockets.on('connection', function(socket) {
 
 
 //Route for new document
-router.get('/new', function(req, res, next) {
+router.get('/new/', function(req, res) {
 
-	let article = new Article()
-      article.title = "Untitled Document"
-      article.author = req.user.name
-      article.body = ""
+	  let article = new Article();
+      article.title = "Untitled Document";
+      article.author = req.user.name;
+	  article.body = "";
+	  
+	  //saving article to the 'articles' collection in the database
+	  article.save(function(err){
+	  if(err)
+		  return console.error(err);
+	  });
 
-      article.save(function(err){
-        if(err){
-          console.log(err)
-          return
-        } else {
-          console.log(article)
-          var doc = {"title": article.title, "reference":article.id}
-          req.user.documents.push(doc)
-          req.user.save()
-          res.redirect('/edit/'+article.id)
-        }
-      })
+	var doc = {"title": article.title, "reference":article.id};
+	
+	// Adding/updating the newly created article to the 'user' model in the 'documents' data field.
+	User.findOneAndUpdate(
+		{_id: req.user._id},
+		{$push: {documents: doc}},		// adding an element to an existing array in the document
+		function (err, numberAffected){
+			if (err)
+				console.log(err)
+			if (numberAffected){
+				console.log("SUCCESSSS!!!!! FINALLYY!")
+				res.redirect('/edit/'+ article.id)
+			}
+		}
+	);
+
+
+	// User.findOne({_id: req.user._id }, function(err, user){
+	// 	var arrayOfDocsToSave = user.documents;
+	// 	// console.log(`doc: ${article.title} , ${article.id}`);
+	// 		// user.documents = arrayOfDocsToSave.push(doc);
+	// 	console.log(typeof arrayOfDocsToSave);
+
+	// 	// console.log(`Should be 0 ${arrayOfDocsToSave}`);
+
+	// 	user.save(function (err) {
+	// 		if(err)
+	// 			console.log(err)
+	// 		else{
+	// 			console.log("Successs")
+	// 		}
+	// 	})
+	// })
 });
 
 

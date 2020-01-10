@@ -27,6 +27,7 @@ var app = express();
 
 // configuration ===============================================================
 var uri = 'mongodb://bobobis:Csun123!@ds113358.mlab.com:13358/virtual_version'
+// var uri = 'mongodb://127.0.0.1:27017/virtual_version'
 var options = {
   "server" : {
     "socketOptions" : {
@@ -45,6 +46,10 @@ var options = {
 mongoose.connect(uri, options);
 
 var db = mongoose.connection;
+
+db.on('open', _ => {
+  console.log("Connected to db uri :", uri);
+})
 
 db.on('error', console.error.bind(console, 'connection error:'));
 // mongoose.connect('mongodb://localhost/my_database'); // connect to our database
