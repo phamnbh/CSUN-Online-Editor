@@ -17,11 +17,11 @@ body {
 
 #login_form{
     margin: auto;    /*Use margin:auto to center the div*/
-	margin-top:20px;
+	margin-top:40px;
     width: 15%;
     border: 3px solid #a37e11;
     padding: 50px;
-	height: 350px;
+	height: 330px;
 	background: #F2F2F2;
 }
 
